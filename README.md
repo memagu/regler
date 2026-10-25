@@ -64,6 +64,13 @@ bara domännamnet, till exempel:
 regler.example.com
 ```
 
+## Spelkänsla
+
+Deluppgifter får gul markering när de påbörjas och grön när alla delpoäng är
+ikryssade. En påbörjad fråga får gul ram och en statusfras som **BRA START**,
+**PÅ GÅNG**, **HALVVÄGS**, **SNART I MÅL** eller **SISTA BITEN**. Fullpoäng
+markeras med guldkant, **SLAKTAD** och en större konfettieffekt.
+
 ## Viktigt om PDF:erna
 
 Sajten är helt statisk; självbedömningen sparas bara i webbläsarens

@@ -20,7 +20,7 @@ Under varje uppgiftsbild finns ikonknapparna **Penna**, **Linje**, **Rektangel**
 Under varje uppgift finns en **Poäng**-rad med en kryssruta per poäng
 (halvpoäng får en egen liten ruta). Bocka av det du löst så räknas summan och
 betyget ut automatiskt i tentans rubrik, utifrån tentans egna betygsgränser.
-När du bockar av en poäng får rutan en liten stöt och en gnistburst. Poängen sparas lokalt i webbläsaren och kan nollställas med **Nollställ poäng**.
+När du bockar av en poäng får rutan en liten stöt och en gnistburst. Deluppgifter gulnar när de påbörjas och blir gröna när alla deras delpoäng är ikryssade. En påbörjad fråga får gul ram och en statusfras som **BRA START**, **PÅ GÅNG**, **HALVVÄGS**, **SNART I MÅL** eller **SISTA BITEN**. Fullpoäng markeras med guldkant, **SLAKTAD** och en större konfettieffekt. Poängen sparas lokalt i webbläsaren och kan nollställas med **Nollställ poäng**.
 
 ## Innehåll
 
