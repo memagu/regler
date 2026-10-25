@@ -7,59 +7,64 @@ gamla tentor uppdelade per uppgift, med dolda lösningar, självbedömning,
 ## Innehåll
 
 ```text
-exams/            16 originaltentor (PDF)
-lectures/         föreläsningskompendium (PDF)
-formula-sheets/   formelsamling (PDF)
-html/             färdig statisk sajt
-  index.html      alla tentor i flikar
-  YYYY-MM-DD.html en sida per tenta
-  assets/         beskurna fråge- och lösningsbilder (WebP)
-scripts/
-  make-site.sh    bygger en publicerbar kopia av html/
-.github/
-  workflows/
-    pages.yml     automatisk publicering till GitHub Pages
+index.html          alla tentor i flikar
+YYYY-MM-DD.html     en sida per tenta
+assets/             beskurna fråge- och lösningsbilder (WebP)
+exams/              16 originaltentor (PDF)
+lectures/           föreläsningskompendium (PDF)
+formula-sheets/     formelsamling (PDF)
+.nojekyll           hindrar GitHub Pages från att köra Jekyll
+FEATURES.md         detaljerad funktionsbeskrivning
 ```
 
-`html/exams`, `html/lectures` och `html/formula-sheets` är symlänkar till
-PDF-mapparna i projektroten. Det gör att sajten fungerar lokalt utan att
-PDF:erna dupliceras. `scripts/make-site.sh` följer symlänkarna och skapar en
-självständig katalog som kan laddas upp till valfri statisk värd.
+Allt som behövs för sajten ligger i repo-roten. Det finns inga symlänkar och
+ingen byggprocess: GitHub Pages kan publicera branchen direkt.
 
 ## Öppna lokalt
 
 ```bash
-cd html
 python3 -m http.server 8000 --bind 0.0.0.0
 ```
 
 Öppna sedan <http://localhost:8000/>. Sajten fungerar även direkt från
 filsystemet, men en lokal server gör att PDF-länkarna beter sig som vanligt.
 
-## Publicera
+## Publicera med GitHub Pages
 
-### GitHub Pages
+1. Skapa ett repository på GitHub och pusha det här projektet till `main`.
+2. Gå till **Settings → Pages**.
+3. Under **Build and deployment**, välj **Source: Deploy from a branch**.
+4. Välj branch **main** och mapp **/(root)**. Spara.
 
-1. Skapa ett repository på GitHub och pusha det här projektet.
-2. Gå till **Settings → Pages** och välj **Source: GitHub Actions**.
-3. Puscha till `main`. Workflowen bygger en självständig sajt och publicerar
-   den automatiskt.
+Klart. GitHub publicerar då repo-roten direkt, utan GitHub Actions och utan
+separat hosting av bilder eller PDF:er.
 
 Sajten hamnar på `https://<användare>.github.io/<repo>/`.
 
-### Netlify / Cloudflare Pages
+## Egen domän
 
-Bygg en färdig katalog och dra den till Netlify Drop, eller använd katalogen
-som publish directory:
+Ja. Gör så här när sajten fungerar på GitHub Pages:
 
-```bash
-./scripts/make-site.sh /tmp/regler-site
+1. Gå till **Settings → Pages → Custom domain** och skriv in din domän,
+   till exempel `regler.example.com`.
+2. Lägg till DNS-posten hos din domänleverantör:
+   - **Subdomän** (t.ex. `regler.example.com`): CNAME till
+     `<användare>.github.io`.
+   - **Rotdomän** (t.ex. `example.com`): A-poster till
+     `185.199.108.153`, `185.199.109.153`, `185.199.110.153` och
+     `185.199.111.153`, samt gärna AAAA-poster till
+     `2606:50c0:8000::153`, `2606:50c0:8001::153`,
+     `2606:50c0:8002::153` och `2606:50c0:8003::153`.
+3. Vänta tills DNS:en slagit igenom och slå sedan på **Enforce HTTPS**.
+
+GitHub skapar en `CNAME`-fil i repo-roten. Den ska ligga kvar och innehålla
+bara domännamnet, till exempel:
+
+```text
+regler.example.com
 ```
 
-`/tmp/regler-site` innehåller då `index.html`, `assets/`, `exams/`,
-`lectures/`, `formula-sheets/` och `.nojekyll`.
-
-### Viktigt om PDF:erna
+## Viktigt om PDF:erna
 
 Sajten är helt statisk; självbedömningen sparas bara i webbläsarens
 `localStorage`. PDF:erna är en del av sajten eftersom taggarna och
@@ -69,5 +74,5 @@ självbedömningen, men PDF-länkarna blir döda.
 
 ## Funktioner
 
-Se [html/README.md](html/README.md) för en beskrivning av gränssnittet,
+Se [FEATURES.md](FEATURES.md) för en beskrivning av gränssnittet,
 ritverktygen, betygsanimationerna och mobilvarianten.

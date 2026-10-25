@@ -1,7 +1,7 @@
 # Local server health check
-html/health
+health
 
-# Generated static-site bundles
+# Generated deploy bundles
 _site/
 site/
 

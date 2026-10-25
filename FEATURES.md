@@ -45,4 +45,4 @@ texten.
 - Bakgrunden har en subtil parallax med formler och blockscheman som rör sig.
 - När du når betygsgränserna (3, 4 eller 5) visas en stor betygsbanner i olika färger, med konfetti – och vid betyg 5 även flygande ljussablar.
 - Får du **alla poäng** får du ett extra **betyg 6** med festläge: disco, ljussablar, spotlights, dansande figurer, eld och extra konfetti.
-- `html/lectures`, `html/formula-sheets` och `html/exams` är symlänkar till PDF:erna i projektmappen, så länkarna fungerar både via servern och när du öppnar HTML-filerna direkt.
+- PDF-mapparna `exams/`, `lectures/` och `formula-sheets/` ligger direkt i repo-roten, så länkarna fungerar både via servern och när du öppnar HTML-filerna direkt.
