@@ -1,0 +1,1749 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tentamen 19 augusti 2026 – lösningar</title>
+<style>
+:root{
+  --bg:#f4f1ea; --panel:#fffdf8; --ink:#1d2430; --muted:#6b7280;
+  --accent:#7b2d26; --accent-soft:#f3e2de; --line:#e4ddd1; --shadow:0 1px 2px rgba(29,36,48,.06),0 10px 30px rgba(29,36,48,.06);
+  --topbar:rgba(244,241,234,.92); --radius:16px; --answer-bg:#fff;
+  --panel-fade:rgba(255,253,248,0); --answer-fade:rgba(255,255,255,0);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+
+.math-backdrop{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;user-select:none}
+.math-mark{position:absolute;display:block;opacity:var(--op,.1);will-change:transform,opacity}
+.math-glyph{display:block;font-family:"Cambria Math","Latin Modern Math","STIX Two Math",Georgia,"Times New Roman",serif;font-style:italic;font-weight:500;line-height:1;white-space:nowrap;color:var(--accent);animation:mathFloat var(--dur,20s) ease-in-out var(--delay,0s) infinite alternate;will-change:transform}
+.math-diagram{display:block;line-height:0}
+.math-diagram svg{display:block;width:100%;height:auto;overflow:visible}
+.math-backdrop sup{font-size:.62em;line-height:0}
+.math-backdrop sub{font-size:.62em;line-height:0}
+@keyframes mathFloat{0%{transform:translate3d(0,0,0) rotate(var(--rot,0deg))}100%{transform:translate3d(var(--dx,10px),var(--dy,-14px),0) rotate(calc(var(--rot,0deg) + 4deg))}}
+main,footer{position:relative;z-index:1}
+
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.topbar{position:sticky;top:0;z-index:20;background:var(--topbar);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar-inner{max-width:1180px;margin:0 auto;padding:12px 20px 10px}
+.topbar-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:8px}
+.brand{font-weight:800;letter-spacing:-.02em;font-size:1.05rem;white-space:nowrap}
+.brand span{font-weight:500;color:var(--muted);margin-left:8px}
+.count{color:var(--muted);font-size:.8rem;white-space:nowrap}
+.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px}
+.tab{appearance:none;border:0;background:transparent;color:var(--muted);font:inherit;font-size:.9rem;font-weight:600;padding:8px 12px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.tab:hover{background:#e9e3d8;color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--ink);color:#fff}
+@media (min-width:1000px){.tabs{flex-wrap:wrap;overflow:visible}}
+main{max-width:1000px;margin:0 auto;padding:32px 20px 80px}
+.exam[hidden]{display:none}
+.exam-head{margin-bottom:26px}
+.back{display:inline-block;text-decoration:none;font-weight:600;font-size:.9rem;margin-bottom:18px}
+.eyebrow{margin:0 0 4px;color:var(--accent);font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.exam-head h1{margin:0;font-size:clamp(1.6rem,4vw,2.4rem);line-height:1.15;letter-spacing:-.025em}
+.meta{margin:8px 0 0;color:var(--muted);font-size:.95rem}
+.hint{color:var(--muted)}
+.toolbar{margin-top:20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:12px;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+.qnav{display:flex;gap:4px;flex-wrap:wrap}
+.qnav a{display:grid;place-items:center;width:32px;height:32px;border-radius:8px;color:var(--ink);text-decoration:none;font-weight:700;font-size:.85rem;background:#f0ebe2}
+.qnav a:hover{background:var(--accent-soft);color:var(--accent)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{appearance:none;font:inherit;font-size:.85rem;font-weight:700;border:1px solid var(--ink);background:var(--ink);color:#fff;padding:8px 14px;border-radius:10px;cursor:pointer}
+.btn:hover{opacity:.9}
+.btn.ghost{background:transparent;color:var(--ink)}
+.questions{display:flex;flex-direction:column;gap:22px}
+.qcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 24px 20px;scroll-margin-top:140px}
+.qcard-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.qnum{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;font-size:.95rem;flex:none}
+.qcard h2{margin:0;font-size:1.1rem;letter-spacing:-.01em}
+
+.qtags{display:flex;flex-wrap:wrap;gap:6px;margin:-2px 0 14px}
+.tag-group{display:inline-flex;align-items:center;padding:3px 8px;border-radius:999px;font-size:.7rem;font-weight:800;letter-spacing:.015em;line-height:1.4;white-space:nowrap;background:var(--tag-bg);color:var(--tag-fg);transition:transform .12s ease,filter .12s ease}
+.tag-group:hover{transform:translateY(-1px);filter:brightness(.96)}
+.tag-main{display:inline-flex;align-items:center;gap:3px;color:inherit;text-decoration:none;cursor:pointer}
+.tag-main:hover .tag-label{text-decoration:underline}
+.tag-link-icon{width:9px;height:9px;opacity:.7;flex:none}
+.tag-main:hover .tag-link-icon{opacity:1}
+.tag-fs{display:inline-flex;align-items:center;gap:3px;margin-left:6px;padding-left:6px;border-left:1px solid currentColor;color:inherit;text-decoration:none;cursor:pointer;opacity:.78}
+.tag-fs:hover{opacity:1;text-decoration:underline}
+.tag-formula{font-family:Georgia,"Times New Roman",serif;font-size:.92em;font-weight:700;line-height:1;transform:translateY(-.3px)}
+
+.q-title-link{display:inline-grid;place-items:center;width:20px;height:20px;margin-left:5px;border-radius:6px;color:var(--muted);text-decoration:none;vertical-align:middle;transition:color .12s ease,background .12s ease}
+.q-title-link:hover{color:var(--accent);background:var(--accent-soft)}
+.q-title-link svg{width:12px;height:12px;display:block}
+
+.draw-block{margin:0}
+.draw-block + .draw-block{margin-top:14px}
+.draw-wrap{position:relative;display:block;overflow:hidden;border-radius:8px;background:#fff;border:1px solid var(--line)}
+.qbody .draw-wrap img{display:block;width:100%;height:auto;border:0;border-radius:0;background:#fff}
+.draw-canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;pointer-events:none;cursor:crosshair}
+.draw-tools{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px}
+.draw-btn{display:inline-flex;align-items:center;gap:4px;appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--muted);font:inherit;font-size:.66rem;font-weight:800;padding:3px 7px;border-radius:7px;cursor:pointer}
+.draw-btn:hover{color:var(--ink);border-color:var(--ink)}
+.draw-btn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.draw-clear{display:inline-flex;align-items:center;gap:4px;appearance:none;border:0;background:transparent;color:var(--muted);font:inherit;font-size:.66rem;font-weight:800;padding:3px 4px;cursor:pointer}
+.draw-clear:hover{color:var(--accent)}
+.draw-hint{font-size:.64rem;color:var(--muted)}
+.draw-btn svg,.draw-clear svg{width:12px;height:12px;flex:none}
+
+.all-head{margin-bottom:18px}
+.filter-panel{margin:0 0 22px;padding:14px 16px;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+.filter-chips{display:flex;flex-wrap:wrap;gap:6px}
+.filter-chip,.tag-btn{appearance:none;display:inline-flex;align-items:center;gap:4px;border:1px solid transparent;border-radius:999px;background:var(--tag-bg);color:var(--tag-fg);font:inherit;font-weight:800;line-height:1.4;white-space:nowrap;cursor:pointer;transition:transform .12s ease,filter .12s ease,opacity .12s ease}
+.filter-chip{font-size:.7rem;padding:3px 8px;opacity:.62}
+.tag-btn{font-size:.66rem;padding:2px 7px}
+.filter-chip:hover,.tag-btn:hover{opacity:1;transform:translateY(-1px);filter:brightness(.96)}
+.filter-chip[aria-pressed="true"],.tag-btn[aria-pressed="true"]{opacity:1;box-shadow:inset 0 0 0 2px currentColor}
+.filter-hint{margin:10px 0 0;color:var(--muted);font-size:.78rem}
+.filter-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:12px;color:var(--muted);font-size:.8rem}
+.all-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.all-item{display:flex;flex-direction:column;gap:10px;padding:16px;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+.all-item[hidden]{display:none}
+.all-item-top{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:.72rem;color:var(--muted);font-weight:700}
+.all-exam{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.all-points{flex:none;font-weight:800}
+.all-item h2{margin:0;font-size:1.05rem;letter-spacing:-.01em}
+.all-excerpt{margin:0;color:var(--muted);font-size:.82rem;line-height:1.45;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.all-tags{display:flex;flex-wrap:wrap;gap:5px}
+.all-open{margin-top:auto;align-self:flex-start;appearance:none;border:0;border-radius:9px;background:var(--ink);color:var(--bg);font:inherit;font-size:.78rem;font-weight:800;padding:7px 12px;cursor:pointer}
+.all-open:hover{opacity:.9}
+.all-empty{color:var(--muted);font-size:.9rem;padding:20px 0}
+
+
+.tag-pid{--tag-bg:#f4e1dd;--tag-fg:#7b2d26}
+.tag-model{--tag-bg:#f4ead2;--tag-fg:#7a5a12}
+.tag-step{--tag-bg:#f6e7d8;--tag-fg:#8a4b1f}
+.tag-freq{--tag-bg:#dceef0;--tag-fg:#1f5b70}
+.tag-stab{--tag-bg:#f6e0e5;--tag-fg:#8a2c45}
+.tag-nyquist{--tag-bg:#dfe9f3;--tag-fg:#2c4a7a}
+.tag-sens{--tag-bg:#ece4f5;--tag-fg:#5b3a78}
+.tag-state{--tag-bg:#e1eafa;--tag-fg:#274b80}
+.tag-kalman{--tag-bg:#e6e3f7;--tag-fg:#483d8b}
+.tag-out{--tag-bg:#e8e8ef;--tag-fg:#4a4a6a}
+.tag-comp{--tag-bg:#dcf0e7;--tag-fg:#1f6a4a}
+.tag-struct{--tag-bg:#e6f0dc;--tag-fg:#3f6a25}
+.tag-case{--tag-bg:#eee9e0;--tag-fg:#5a5145}
+.points{margin-left:auto;font-size:.82rem;font-weight:700;color:var(--muted);background:#f0ebe2;padding:4px 9px;border-radius:999px;white-space:nowrap}
+
+.gradebar{margin-top:18px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:14px 18px;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+.grade-score-wrap{display:flex;flex-direction:column;gap:2px;min-width:86px}
+.grade-label{font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.grade-score{font-size:1.4rem;font-weight:800;line-height:1.1;white-space:nowrap}
+.grade-score span{font-size:.9rem;font-weight:600;color:var(--muted)}
+.grade-badge{display:flex;align-items:center;gap:8px;padding:7px 13px;border-radius:10px;background:#f0ebe2;border:1px solid var(--line);white-space:nowrap}
+.grade-badge span{font-size:.68rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.grade-badge strong{font-size:1.35rem;line-height:1}
+.grade-badge.grade-3{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.grade-badge.grade-4{background:#e2edf1;color:#1f5b70;border-color:transparent}
+.grade-badge.grade-5{background:#e3efe0;color:#2f6a38;border-color:transparent}
+.grade-badge.grade-6{background:linear-gradient(135deg,#ff3d81,#ffb703,#3ddc97,#3a86ff);background-size:300% 300%;color:#fff;border-color:transparent;animation:rainbowShift 2.2s linear infinite;box-shadow:0 0 16px rgba(255,100,200,.45)}
+.grade-badge.grade-6 span{color:rgba(255,255,255,.92)}
+.grade-badge.grade-6 strong{color:#fff}
+.grade-badge.grade-u{color:var(--muted)}
+.grade-info{flex:1;min-width:220px}
+.grade-note{font-size:.86rem;font-weight:700}
+.grade-scale{font-size:.78rem;color:var(--muted);margin-top:2px}
+
+.confetti-canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9999}
+.grade-banner{position:fixed;left:50%;top:50%;z-index:10001;pointer-events:none;text-align:center;padding:22px 46px;border-radius:22px;color:#fff;opacity:0;transform:translate(-50%,-46%) scale(.7) rotate(-2deg);transition:opacity .22s ease,transform .55s cubic-bezier(.2,.9,.25,1.35);box-shadow:0 24px 80px rgba(0,0,0,.28);will-change:transform,opacity}
+.grade-banner.show{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}
+.grade-banner .banner-kicker{display:block;font-size:.72rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;opacity:.8;margin-bottom:2px}
+.grade-banner .banner-title{display:block;font-size:clamp(2.6rem,7vw,5.2rem);line-height:.92;letter-spacing:-.045em;font-weight:900}
+.grade-banner .banner-sub{display:block;font-size:1.18rem;font-weight:800;margin-top:10px;opacity:.92;letter-spacing:.01em}
+.grade-banner-3{background:linear-gradient(135deg,#631f1a,#a84135 55%,#d97866);border:2px solid rgba(255,220,210,.4);box-shadow:0 0 0 5px rgba(123,45,38,.12),0 24px 80px rgba(80,20,15,.35)}
+.grade-banner-4{background:linear-gradient(135deg,#123743,#2b7280 55%,#5aaeb9);clip-path:polygon(4% 0,100% 0,96% 100%,0 100%);border-radius:2px;padding-left:62px;padding-right:62px;box-shadow:0 0 0 5px rgba(31,91,112,.14),0 24px 80px rgba(10,45,55,.35)}
+.grade-banner-5{background:linear-gradient(135deg,#f8df8f,#dda32c 45%,#fbecb2);color:#2b1d05;border:2px solid rgba(255,255,255,.75);border-radius:26px;box-shadow:0 0 0 7px rgba(240,190,60,.16),0 0 90px rgba(240,190,60,.7),0 26px 90px rgba(0,0,0,.3);padding:26px 60px;isolation:isolate}
+.grade-banner-5::before{content:"";position:absolute;inset:-55px;z-index:-1;border-radius:50%;background:conic-gradient(from 0deg,transparent 0 8%,rgba(255,220,120,.55) 12%,transparent 20% 30%,rgba(255,240,170,.6) 36%,transparent 44% 55%,rgba(255,220,120,.5) 62%,transparent 70% 82%,rgba(255,240,170,.55) 88%,transparent 96%);filter:blur(14px);animation:gradeHalo 3.2s linear infinite}
+.grade-banner-5 .banner-kicker{opacity:.7}
+.grade-banner-5 .banner-title{text-shadow:0 2px 0 rgba(255,255,255,.5),0 10px 30px rgba(150,95,0,.35)}
+.grade-banner-5 .banner-sub{opacity:.8}
+.grade-banner-6{background:linear-gradient(135deg,#ff3d81,#ffb703,#3ddc97,#3a86ff,#c77dff);background-size:320% 320%;color:#fff;border:3px solid rgba(255,255,255,.8);border-radius:28px;padding:28px 62px;box-shadow:0 0 0 8px rgba(255,255,255,.16),0 0 110px rgba(255,95,180,.75),0 26px 90px rgba(0,0,0,.35);isolation:isolate;animation:rainbowShift 3s ease infinite}
+.grade-banner-6::before{content:"";position:absolute;inset:-60px;z-index:-1;border-radius:50%;background:conic-gradient(from 0deg,#ff3d81,#ffd166,#3ddc97,#3a86ff,#c77dff,#ff3d81);filter:blur(20px);opacity:.55;animation:gradeHalo 2.4s linear infinite}
+.grade-banner-6 .banner-kicker{opacity:.9}
+.grade-banner-6 .banner-title{text-shadow:0 2px 0 rgba(255,255,255,.45),0 10px 35px rgba(0,0,0,.3)}
+@keyframes rainbowShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes gradeHalo{to{transform:rotate(360deg)}}
+.grade-flash{position:fixed;inset:0;z-index:9997;pointer-events:none;opacity:0;animation:gradeFlash .9s ease-out forwards}
+.grade-flash-3{background:radial-gradient(circle at 50% 50%,rgba(123,45,38,.3),transparent 65%)}
+.grade-flash-4{background:radial-gradient(circle at 50% 50%,rgba(31,91,112,.3),transparent 65%)}
+.grade-flash-5{background:radial-gradient(circle at 50% 50%,rgba(240,190,60,.42),transparent 68%)}
+.grade-flash-6{background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.55),rgba(255,80,180,.4) 35%,transparent 70%)}
+@keyframes gradeFlash{0%{opacity:0}18%{opacity:1}100%{opacity:0}}
+.lightsaber{position:fixed;top:var(--top,50vh);width:var(--len,220px);height:5px;border-radius:999px;pointer-events:none;z-index:10000;transform-origin:center;filter:drop-shadow(0 0 6px var(--saber,#4cc9f0)) drop-shadow(0 0 18px var(--saber,#4cc9f0));animation:saberLtr var(--dur,1.2s) cubic-bezier(.15,.65,.35,1) var(--delay,0s) forwards;will-change:transform,opacity}
+.lightsaber::before{content:"";position:absolute;inset:0;border-radius:999px;background:linear-gradient(90deg,transparent,var(--saber,#4cc9f0) 10%,#fff 50%,var(--saber,#4cc9f0) 90%,transparent);box-shadow:0 0 10px var(--saber,#4cc9f0),0 0 26px var(--saber,#4cc9f0)}
+.lightsaber::after{content:"";position:absolute;top:-4px;width:15px;height:13px;border-radius:3px;background:linear-gradient(180deg,#c3c9cf,#646b72 55%,#2c3035);box-shadow:0 1px 2px rgba(0,0,0,.45)}
+.lightsaber.ltr{left:-340px}
+.lightsaber.ltr::after{right:-12px}
+.lightsaber.rtl{right:-340px;animation-name:saberRtl}
+.lightsaber.rtl::after{left:-12px}
+@keyframes saberLtr{0%{transform:translateX(0) rotate(var(--angle,0deg));opacity:0}6%{opacity:1}92%{opacity:1}100%{transform:translateX(calc(100vw + 700px)) rotate(var(--angle,0deg));opacity:0}}
+@keyframes saberRtl{0%{transform:translateX(0) rotate(var(--angle,0deg));opacity:0}6%{opacity:1}92%{opacity:1}100%{transform:translateX(calc(-100vw - 700px)) rotate(var(--angle,0deg));opacity:0}}
+
+.party-overlay{position:fixed;inset:0;z-index:9990;pointer-events:none;overflow:hidden;opacity:1;background:radial-gradient(circle at 50% 15%,rgba(255,0,180,.16),transparent 45%),rgba(6,4,16,.32);animation:partyIn .4s ease-out}
+.party-overlay.party-out{opacity:0;transition:opacity .6s ease}
+@keyframes partyIn{from{opacity:0}to{opacity:1}}
+@keyframes partyOut{to{opacity:0}}
+.party-floor{position:absolute;left:0;right:0;bottom:0;height:24vh;background:repeating-linear-gradient(90deg,rgba(255,61,129,.22) 0 42px,transparent 42px 84px),repeating-linear-gradient(0deg,rgba(58,134,255,.2) 0 42px,transparent 42px 84px);mix-blend-mode:screen;animation:floorHue 2.2s linear infinite;mask-image:linear-gradient(to top,black,transparent);-webkit-mask-image:linear-gradient(to top,black,transparent)}
+@keyframes floorHue{to{filter:hue-rotate(360deg)}}
+.disco-ball{position:absolute;top:-18px;left:50%;font-size:64px;z-index:3;transform-origin:50% 0;animation:discoSwing 2.1s ease-in-out infinite alternate;filter:drop-shadow(0 0 22px rgba(255,255,255,.75))}
+@keyframes discoSwing{from{transform:translateX(-50%) rotate(-12deg)}to{transform:translateX(-50%) rotate(12deg)}}
+.spotlight{position:absolute;top:-18%;width:55vw;height:135vh;transform-origin:50% 0;background:linear-gradient(to bottom,var(--spot,#fff),transparent 72%);clip-path:polygon(47% 0,53% 0,100% 100%,0 100%);filter:blur(12px);mix-blend-mode:screen;opacity:.32;animation:spotSweep var(--dur,4s) ease-in-out infinite alternate;animation-delay:var(--delay,0s)}
+@keyframes spotSweep{from{transform:rotate(-18deg)}to{transform:rotate(18deg)}}
+.laser{position:absolute;height:3px;width:120vw;background:linear-gradient(90deg,transparent,var(--laser,#fff),#fff,var(--laser,#fff),transparent);box-shadow:0 0 12px var(--laser,#fff),0 0 40px var(--laser,#fff);mix-blend-mode:screen;opacity:.75;animation:laserSweep var(--dur,2s) ease-in-out infinite alternate;animation-delay:var(--delay,0s);transform-origin:left center}
+.laser.ltr{left:-10%}
+.laser.rtl{right:-10%;left:auto;transform-origin:right center;animation-name:laserSweepRtl}
+@keyframes laserSweep{from{transform:rotate(-16deg)}to{transform:rotate(16deg)}}
+@keyframes laserSweepRtl{from{transform:rotate(16deg)}to{transform:rotate(-16deg)}}
+.dancer{position:absolute;bottom:1.5vh;z-index:4;animation:dance .55s steps(2,end) infinite alternate;animation-delay:var(--delay,0s);filter:drop-shadow(0 0 8px rgba(255,255,255,.4))}
+@keyframes dance{from{transform:translateY(0) rotate(-7deg)}to{transform:translateY(-14px) rotate(7deg)}}
+.fire{position:absolute;bottom:-12px;z-index:3;font-size:38px;animation:fireDance .48s ease-in-out infinite alternate;animation-delay:var(--delay,0s);filter:drop-shadow(0 0 10px #ff6a00)}
+@keyframes fireDance{from{transform:translateY(0) scale(.9) rotate(-5deg)}to{transform:translateY(-18px) scale(1.12) rotate(5deg)}}
+.disco-dot{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--dot,#fff);box-shadow:0 0 18px var(--dot,#fff);mix-blend-mode:screen;animation:dotFloat var(--dur,2.5s) ease-in-out infinite alternate;animation-delay:var(--delay,0s)}
+@keyframes dotFloat{from{transform:scale(.7) translateY(0);opacity:.5}to{transform:scale(1.4) translateY(-18px);opacity:1}}
+.party-star{position:absolute;z-index:4;font-size:28px;animation:starFloat var(--dur,3s) ease-in-out infinite alternate;animation-delay:var(--delay,0s);filter:drop-shadow(0 0 10px rgba(255,255,255,.6))}
+@keyframes starFloat{from{transform:translateY(0) rotate(-8deg) scale(.9);opacity:.6}to{transform:translateY(-30px) rotate(8deg) scale(1.15);opacity:1}}
+.grade-badge.grade-pop{animation:gradePop .65s cubic-bezier(.2,.9,.25,1.2)}
+.gradebar.celebrate{animation:gradeGlow 1.2s ease}
+@keyframes gradePop{0%{transform:scale(1)}35%{transform:scale(1.22) rotate(-2deg)}70%{transform:scale(.97)}100%{transform:scale(1)}}
+@keyframes gradeGlow{0%,100%{box-shadow:var(--shadow)}40%{box-shadow:0 0 0 4px rgba(123,45,38,.13),0 18px 50px rgba(123,45,38,.18)}}
+.scoring{margin-top:16px;padding:10px 12px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:#f7f3ea;border:1px solid var(--line);border-radius:12px}
+.scoring-label{font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.point-groups{display:flex;gap:10px;flex-wrap:wrap}
+.point-group{display:flex;align-items:center;gap:8px;padding:4px 9px;border:1px solid var(--line);border-radius:9px;background:var(--panel)}
+.group-label{font-size:.74rem;font-weight:700;color:var(--muted);white-space:nowrap}
+.pt-boxes{display:flex;align-items:center;gap:5px}
+.pt{position:relative;display:inline-flex;align-items:center;gap:3px;cursor:pointer}
+.pt input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.pt-box{width:20px;height:20px;border:1.5px solid #cfc6b7;border-radius:6px;background:var(--panel);display:inline-grid;place-items:center;transition:background .12s,border-color .12s;position:relative}
+.pt-box.pt-hit{z-index:6;animation:ptHit .34s cubic-bezier(.2,.9,.25,1.2),ptFlash .48s ease-out}
+.pt-box.pt-hit::before{content:"";position:absolute;inset:-4px;border-radius:9px;border:2px solid var(--accent);pointer-events:none;animation:ptRing .45s ease-out}
+.pt-sparks{position:absolute;left:50%;top:50%;width:0;height:0;pointer-events:none;z-index:3}
+.pt-sparks i{position:absolute;left:0;top:0;border-radius:50%;transform:translate(-50%,-50%);animation:ptSpark .6s cubic-bezier(.12,.72,.28,1) forwards}
+@keyframes ptHit{0%{transform:scale(1)}25%{transform:scale(1.2) rotate(-5deg)}55%{transform:scale(.94) rotate(4deg)}80%{transform:scale(1.06)}100%{transform:scale(1)}}
+@keyframes ptFlash{0%{box-shadow:0 0 0 0 rgba(214,69,69,.45)}100%{box-shadow:0 0 0 12px rgba(214,69,69,0)}}
+@keyframes ptRing{0%{opacity:.85;transform:scale(.65)}100%{opacity:0;transform:scale(1.35)}}
+@keyframes ptSpark{0%{opacity:1;transform:translate(-50%,-50%) translate(0,0) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) translate(var(--dx,0px),var(--dy,0px)) scale(.15)}}
+.pt:hover .pt-box{border-color:var(--accent)}
+.pt input:checked + .pt-box{background:var(--accent);border-color:var(--accent)}
+.pt input:checked + .pt-box::after{content:"✓";color:#fff;font-size:13px;font-weight:900;line-height:1}
+.pt input:focus-visible + .pt-box{outline:2px solid var(--accent);outline-offset:2px}
+.pt-half{font-size:.66rem;font-weight:800;color:var(--muted)}
+.btn.small{padding:6px 10px;font-size:.78rem}
+.qbody img,.answer-body img,.extra-figure{display:block;width:100%;height:auto;background:#fff;border-radius:8px;border:1px solid #eee7dc}
+.extra-figure{margin-top:14px}
+.answer{margin-top:18px;border-top:1px dashed var(--line);padding-top:14px}
+.answer summary{display:flex;align-items:center;gap:10px;list-style:none;cursor:pointer;user-select:none;font-weight:700;color:var(--accent);width:max-content;max-width:100%;padding:6px 2px}
+.answer summary::-webkit-details-marker{display:none}
+.chev{width:9px;height:9px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);transition:transform .15s;margin-left:2px}
+.answer[open] .chev{transform:rotate(45deg)}
+.answer summary:hover .label{text-decoration:underline}
+.answer-body{margin-top:14px}
+.answer-inner{position:relative;overflow:hidden;padding:14px;background:var(--answer-bg);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px}
+.answer-scroll{overflow:visible}
+footer{max-width:1000px;margin:0 auto;padding:0 20px 50px;color:var(--muted);font-size:.85rem}
+@media (max-width:640px){
+  .math-backdrop{opacity:.55}
+
+  main{padding:22px 12px 60px}
+  .qcard{padding:16px 14px}
+  .toolbar{padding:10px}
+  .brand span{display:none}
+  .topbar-inner{padding:10px 12px 8px}
+  .count{display:none}
+  .answer-inner{padding:8px}
+  .gradebar{padding:12px;gap:12px}
+  .grade-info{min-width:100%;order:4}
+  .scoring{padding:8px 10px;gap:8px}
+  .grade-banner{padding:18px 26px}
+  .grade-banner-4{padding-left:34px;padding-right:34px}
+  .grade-banner-5{padding:20px 28px}
+  .grade-banner-6{padding:22px 30px}
+  .all-list{grid-template-columns:1fr}
+  .filter-panel{padding:12px}
+  .qbody{position:relative}
+  .qscroll,.answer-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .qbody .draw-block{width:720px;max-width:none}
+  .qbody .draw-wrap img{width:100%;max-width:none}
+  .answer-scroll>img{width:720px;max-width:none}
+  .qbody::before,.qbody::after,.answer-inner::before,.answer-inner::after{content:"";position:absolute;top:0;bottom:0;width:16px;z-index:4;pointer-events:none;opacity:0;transition:opacity .15s;display:grid;place-items:center;font-size:14px;line-height:1;font-weight:800;color:var(--muted)}
+  .qbody::before{left:0;background:linear-gradient(to right,var(--panel),var(--panel-fade))}
+  .qbody::after{right:0;background:linear-gradient(to left,var(--panel),var(--panel-fade))}
+  .answer-inner::before{left:0;background:linear-gradient(to right,var(--answer-bg),var(--answer-fade))}
+  .answer-inner::after{right:0;background:linear-gradient(to left,var(--answer-bg),var(--answer-fade))}
+  .qbody.can-left::before,.answer-inner.can-left::before{opacity:.8;content:"‹"}
+  .qbody.can-right::after,.answer-inner.can-right::after{opacity:.8;content:"›"}
+}
+@media (prefers-reduced-motion:reduce){
+  .math-glyph{animation:none}
+  .grade-badge.grade-pop,.gradebar.celebrate,.grade-banner-5::before,.grade-banner-6::before{animation:none}
+  .grade-banner{transition:none}
+  .grade-flash,.lightsaber,.party-overlay{display:none}
+  .pt-box.pt-hit{animation:none}
+  .pt-box.pt-hit::before,.pt-sparks{display:none}
+}
+@media print{
+  .math-backdrop{display:none}
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#14171c;--panel:#1b2027;--ink:#e8e5df;--muted:#9aa3ae;--accent:#e0a099;--accent-soft:#3a2624;--line:#2b323b;--shadow:0 10px 30px rgba(0,0,0,.25);--topbar:rgba(20,23,28,.9);--answer-bg:#161a20;--panel-fade:rgba(27,32,39,0);--answer-fade:rgba(22,26,32,0)}
+  .tab:hover{background:#252b33}
+  .tab[aria-selected="true"]{background:var(--ink);color:#14171c}
+  .qnav a{background:#252b33}
+  .points{background:#252b33}
+
+  .tag-pid{--tag-bg:#3a2624;--tag-fg:#f0b3ab}
+  .tag-model{--tag-bg:#332a18;--tag-fg:#e8c986}
+  .tag-step{--tag-bg:#35271a;--tag-fg:#eab88a}
+  .tag-freq{--tag-bg:#1d333a;--tag-fg:#8ecfdf}
+  .tag-stab{--tag-bg:#3a2229;--tag-fg:#efafc0}
+  .tag-nyquist{--tag-bg:#1e2c3e;--tag-fg:#a8c4e8}
+  .tag-sens{--tag-bg:#2d2438;--tag-fg:#c7aee6}
+  .tag-state{--tag-bg:#1e2a3e;--tag-fg:#a9c2ee}
+  .tag-kalman{--tag-bg:#29243d;--tag-fg:#bdb3f0}
+  .tag-out{--tag-bg:#25252f;--tag-fg:#bfc0d5}
+  .tag-comp{--tag-bg:#1b3328;--tag-fg:#9bd8bd}
+  .tag-struct{--tag-bg:#233018;--tag-fg:#b7d89a}
+  .tag-case{--tag-bg:#2b2822;--tag-fg:#cfc5b4}
+  .gradebar{background:#1b2027}
+  .grade-badge{background:#252b33;border-color:#2b323b}
+  .grade-badge.grade-3{background:#3a2624;color:#e0a099;border-color:transparent}
+  .grade-badge.grade-4{background:#1d333a;color:#8ecfdf;border-color:transparent}
+  .grade-badge.grade-5{background:#22351f;color:#9bd39b;border-color:transparent}
+  .scoring{background:#181c22}
+  .pt-box{border-color:#3a424c}
+  .qbody img,.answer-body img,.extra-figure{border-color:#2b323b}
+  .btn{border-color:#e8e5df;background:#e8e5df;color:#14171c}
+  .btn.ghost{background:transparent;color:var(--ink)}
+}
+</style>
+</head>
+<body>
+<div class="math-backdrop" aria-hidden="true"><span class="math-mark" style="left:4%;top:22%;--op:0.133" data-top="22" data-speed="0.18" data-op="0.133"><span class="math-glyph" style="font-size:1.6rem;--dur:11.2s;--delay:-4s;--rot:-8deg;--dx:32.5px;--dy:-42.5px">∑</span></span><span class="math-mark" style="left:7%;top:68%;--op:0.114" data-top="68" data-speed="0.1" data-op="0.114"><span class="math-glyph" style="font-size:1.5rem;--dur:14.7s;--delay:-12s;--rot:12deg;--dx:-30.0px;--dy:37.5px">∫</span></span><span class="math-mark" style="left:11%;top:42%;--op:0.171" data-top="42" data-speed="0.24" data-op="0.171"><span class="math-glyph" style="font-size:1.0rem;--dur:9.799999999999999s;--delay:-3s;--rot:-12deg;--dx:22.5px;--dy:-25.0px">ω</span></span><span class="math-mark" style="left:3%;top:84%;--op:0.133" data-top="84" data-speed="0.08" data-op="0.133"><span class="math-glyph" style="font-size:1.2rem;--dur:12.6s;--delay:-9s;--rot:8deg;--dx:27.5px;--dy:-32.5px">ζ</span></span><span class="math-mark" style="left:14%;top:28%;--op:0.114" data-top="28" data-speed="0.14" data-op="0.114"><span class="math-glyph" style="font-size:1.1rem;--dur:14.0s;--delay:-15s;--rot:5deg;--dx:-25.0px;--dy:30.0px">√</span></span><span class="math-mark" style="left:20%;top:76%;--op:0.152" data-top="76" data-speed="0.2" data-op="0.152"><span class="math-glyph" style="font-size:0.95rem;--dur:11.899999999999999s;--delay:-7s;--rot:-10deg;--dx:35.0px;--dy:20.0px">Δ</span></span><span class="math-mark" style="left:92%;top:24%;--op:0.152" data-top="24" data-speed="0.16" data-op="0.152"><span class="math-glyph" style="font-size:1.0rem;--dur:10.5s;--delay:-5s;--rot:6deg;--dx:25.0px;--dy:-30.0px">G(s)</span></span><span class="math-mark" style="left:88%;top:55%;--op:0.133" data-top="55" data-speed="0.12" data-op="0.133"><span class="math-glyph" style="font-size:1.1rem;--dur:13.299999999999999s;--delay:-11s;--rot:-7deg;--dx:-30.0px;--dy:25.0px">H(s)</span></span><span class="math-mark" style="left:93%;top:78%;--op:0.171" data-top="78" data-speed="0.26" data-op="0.171"><span class="math-glyph" style="font-size:0.95rem;--dur:9.1s;--delay:-2s;--rot:10deg;--dx:20.0px;--dy:-35.0px">1/s</span></span><span class="math-mark" style="left:90%;top:89%;--op:0.114" data-top="89" data-speed="0.07" data-op="0.114"><span class="math-glyph" style="font-size:1.3rem;--dur:15.399999999999999s;--delay:-14s;--rot:-5deg;--dx:30.0px;--dy:25.0px">π</span></span><span class="math-mark" style="left:5%;top:50%;--op:0.152" data-top="50" data-speed="0.22" data-op="0.152"><span class="math-glyph" style="font-size:0.95rem;--dur:9.799999999999999s;--delay:-6s;--rot:12deg;--dx:35.0px;--dy:-25.0px">e<sup>−sL</sup></span></span><span class="math-mark" style="left:95%;top:38%;--op:0.152" data-top="38" data-speed="0.15" data-op="0.152"><span class="math-glyph" style="font-size:1.0rem;--dur:12.6s;--delay:-8s;--rot:-9deg;--dx:-20.0px;--dy:30.0px">s<sup>2</sup></span></span><span class="math-mark" style="left:84%;top:14%;--op:0.133" data-top="14" data-speed="0.11" data-op="0.133"><span class="math-glyph" style="font-size:0.9rem;--dur:11.2s;--delay:-10s;--rot:4deg;--dx:30.0px;--dy:-20.0px">∠G(jω)</span></span><span class="math-mark" style="left:13%;top:32%;--op:0.133" data-top="32" data-speed="0.19" data-op="0.133"><span class="math-glyph" style="font-size:0.9rem;--dur:14.7s;--delay:-4s;--rot:-6deg;--dx:-25.0px;--dy:-30.0px">s + a</span></span><span class="math-mark" style="left:2%;top:62%;--op:0.171" data-top="62" data-speed="0.28" data-op="0.171"><span class="math-glyph" style="font-size:0.9rem;--dur:8.399999999999999s;--delay:-13s;--rot:7deg;--dx:20.0px;--dy:35.0px">K<sub>p</sub></span></span><span class="math-mark" style="left:87%;top:66%;--op:0.152" data-top="66" data-speed="0.09" data-op="0.152"><span class="math-glyph" style="font-size:0.9rem;--dur:14.0s;--delay:-1s;--rot:-11deg;--dx:-30.0px;--dy:25.0px">T<sub>i</sub></span></span><span class="math-mark" style="left:23%;top:18%;--op:0.114" data-top="18" data-speed="0.13" data-op="0.114"><span class="math-glyph" style="font-size:0.85rem;--dur:11.899999999999999s;--delay:-12s;--rot:9deg;--dx:25.0px;--dy:-25.0px">|G(jω)|</span></span><span class="math-mark" style="left:74%;top:88%;--op:0.133" data-top="88" data-speed="0.06" data-op="0.133"><span class="math-glyph" style="font-size:0.95rem;--dur:16.099999999999998s;--delay:-6s;--rot:5deg;--dx:-35.0px;--dy:20.0px">e<sup>−sT</sup></span></span><span class="math-mark" style="left:6%;top:94%;--op:0.133" data-top="94" data-speed="0.17" data-op="0.133"><span class="math-glyph" style="font-size:1.1rem;--dur:10.5s;--delay:-9s;--rot:-8deg;--dx:25.0px;--dy:-30.0px">∂</span></span><span class="math-mark" style="left:91%;top:8%;--op:0.133" data-top="8" data-speed="0.23" data-op="0.133"><span class="math-glyph" style="font-size:1.0rem;--dur:13.299999999999999s;--delay:-3s;--rot:11deg;--dx:-25.0px;--dy:-20.0px">λ</span></span><span class="math-mark" style="left:18%;top:52%;--op:0.104" data-top="52" data-speed="0.05" data-op="0.104"><span class="math-glyph" style="font-size:0.8rem;--dur:16.799999999999997s;--delay:-14s;--rot:-4deg;--dx:30.0px;--dy:25.0px">G(s)=K/(sT+1)</span></span><span class="math-mark" style="left:78%;top:46%;--op:0.095" data-top="46" data-speed="0.04" data-op="0.095"><span class="math-glyph" style="font-size:0.78rem;--dur:17.5s;--delay:-8s;--rot:6deg;--dx:-30.0px;--dy:-25.0px">s<sup>2</sup>+2ζω₀s+ω₀<sup>2</sup></span></span><span class="math-mark" style="left:1.5%;top:38%;--op:0.123" data-top="38" data-speed="0.12" data-op="0.123"><span class="math-glyph math-diagram" style="width:155px;--dur:14.25s;--delay:-5s;--rot:-3deg;--dx:26.4px;--dy:-31.2px"><svg viewBox="0 0 166 78" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="md1" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="currentColor"/></marker></defs>
+<g stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M2 32 H18" marker-end="url(#md1)"/><circle cx="28" cy="32" r="8"/><path d="M24 32 H32 M28 28 V36"/><path d="M36 32 H48" marker-end="url(#md1)"/>
+<rect x="48" y="20" width="42" height="24" rx="2"/><path d="M90 32 H148" marker-end="url(#md1)"/><path d="M124 32 V62 H28 V40" marker-end="url(#md1)"/>
+</g>
+<g fill="currentColor" stroke="none" font-family="Georgia,serif" font-size="10" text-anchor="middle">
+<text x="69" y="36">G(s)</text><text x="8" y="28" text-anchor="start">r</text><text x="158" y="36">y</text><text x="18" y="48" text-anchor="end">−</text>
+</g></svg></span></span><span class="math-mark" style="left:89.5%;top:30%;--op:0.114" data-top="30" data-speed="0.09" data-op="0.114"><span class="math-glyph math-diagram" style="width:150px;--dur:15.75s;--delay:-9s;--rot:2deg;--dx:-24.0px;--dy:28.799999999999997px"><svg viewBox="0 0 186 78" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="md2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="currentColor"/></marker></defs>
+<g stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M2 32 H18" marker-end="url(#md2)"/><circle cx="28" cy="32" r="8"/><path d="M24 32 H32 M28 28 V36"/><path d="M36 32 H46" marker-end="url(#md2)"/>
+<rect x="46" y="20" width="40" height="24" rx="2"/><path d="M86 32 H98" marker-end="url(#md2)"/><rect x="98" y="20" width="46" height="24" rx="2"/>
+<path d="M144 32 H166" marker-end="url(#md2)"/><path d="M148 32 V62 H28 V40" marker-end="url(#md2)"/>
+</g>
+<g fill="currentColor" stroke="none" font-family="Georgia,serif" font-size="10" text-anchor="middle">
+<text x="66" y="36">PID</text><text x="121" y="36">P(s)</text><text x="8" y="28" text-anchor="start">r</text><text x="178" y="36">y</text><text x="18" y="48" text-anchor="end">−</text>
+</g></svg></span></span><span class="math-mark" style="left:1%;top:73%;--op:0.104" data-top="73" data-speed="0.07" data-op="0.104"><span class="math-glyph math-diagram" style="width:165px;--dur:18.0s;--delay:-13s;--rot:1deg;--dx:28.799999999999997px;--dy:21.599999999999998px"><svg viewBox="0 0 190 78" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="md3" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="currentColor"/></marker></defs>
+<g stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M2 32 H18" marker-end="url(#md3)"/><circle cx="28" cy="32" r="8"/><path d="M24 32 H32 M28 28 V36"/><path d="M36 32 H46" marker-end="url(#md3)"/>
+<rect x="46" y="20" width="38" height="24" rx="2"/><path d="M84 32 H94" marker-end="url(#md3)"/><rect x="94" y="20" width="38" height="24" rx="2"/>
+<path d="M132 32 H164" marker-end="url(#md3)"/><path d="M150 32 V62 H28 V40" marker-end="url(#md3)"/>
+</g>
+<g fill="currentColor" stroke="none" font-family="Georgia,serif" font-size="10" text-anchor="middle">
+<text x="65" y="36">G₁(s)</text><text x="113" y="36">G₂(s)</text><text x="8" y="28" text-anchor="start">r</text><text x="176" y="36">y</text><text x="18" y="48" text-anchor="end">−</text>
+</g></svg></span></span><span class="math-mark" style="left:87.5%;top:67%;--op:0.104" data-top="67" data-speed="0.1" data-op="0.104"><span class="math-glyph math-diagram" style="width:175px;--dur:16.5s;--delay:-3s;--rot:-2deg;--dx:-26.4px;--dy:-24.0px"><svg viewBox="0 0 210 110" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="md4" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="currentColor"/></marker></defs>
+<g stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M2 32 H18" marker-end="url(#md4)"/><circle cx="28" cy="32" r="8"/><path d="M24 32 H32 M28 28 V36"/><path d="M36 32 H46" marker-end="url(#md4)"/>
+<rect x="46" y="20" width="38" height="24" rx="2"/><path d="M84 32 H100" marker-end="url(#md4)"/><circle cx="110" cy="32" r="8"/><path d="M106 32 H114 M110 28 V36"/>
+<path d="M118 32 H130" marker-end="url(#md4)"/><rect x="130" y="20" width="44" height="24" rx="2"/><path d="M174 32 H196" marker-end="url(#md4)"/>
+<path d="M2 82 H46" marker-end="url(#md4)"/><rect x="46" y="70" width="38" height="24" rx="2"/><path d="M84 82 H102 V40" marker-end="url(#md4)"/>
+<path d="M184 32 V104 H28 V40" marker-end="url(#md4)"/>
+</g>
+<g fill="currentColor" stroke="none" font-family="Georgia,serif" font-size="10" text-anchor="middle">
+<text x="65" y="36">G_R</text><text x="152" y="36">G_P</text><text x="65" y="86">G_FF</text>
+<text x="8" y="28" text-anchor="start">r</text><text x="8" y="78" text-anchor="start">d</text><text x="202" y="36">y</text><text x="18" y="48" text-anchor="end">−</text>
+</g></svg></span></span></div>
+<main class="standalone">
+  <header class="exam-head">
+    <a class="back" href="index.html">← Alla tentor</a>
+    <div class="exam-title">
+      <p class="eyebrow">Reglerteknik AK</p>
+      <h1>Tentamen 19 augusti 2026</h1>
+      <p class="meta">9 uppgifter · 50 p · <span class="hint">Lösningarna är dolda tills du klickar.</span></p>
+    </div>
+    <div class="gradebar" data-exam="2026-08-19" data-total="50" data-boundaries='{"3": 24.0, "4": 34.0, "5": 44.0}'>
+      <div class="grade-score-wrap">
+        <span class="grade-label">Dina poäng</span>
+        <div class="grade-score"><strong data-grade-score>0</strong><span> / 50 p</span></div>
+      </div>
+      <div class="grade-badge grade-u" data-grade-badge><span>Betyg</span><strong>U</strong></div>
+      <div class="grade-info">
+        <div class="grade-note" data-grade-note>24 p kvar till betyg 3</div>
+        <div class="grade-scale">Gränser: 3 = 24 p · 4 = 34 p · 5 = 44 p · 6 = alla poäng</div>
+      </div>
+      <button type="button" class="btn ghost small" data-reset>Nollställ poäng</button>
+    </div>
+    <div class="toolbar">
+      <nav class="qnav" aria-label="Hoppa till uppgift"><a href="#2026-08-19-q1">1</a><a href="#2026-08-19-q2">2</a><a href="#2026-08-19-q3">3</a><a href="#2026-08-19-q4">4</a><a href="#2026-08-19-q5">5</a><a href="#2026-08-19-q6">6</a><a href="#2026-08-19-q7">7</a><a href="#2026-08-19-q8">8</a><a href="#2026-08-19-q9">9</a></nav>
+      <div class="actions">
+        <button type="button" class="btn" data-open-all>Visa alla lösningar</button>
+        <button type="button" class="btn ghost" data-close-all>Dölj alla</button>
+      </div>
+    </div>
+  </header>
+  <div class="questions">
+
+    <article class="qcard" id="2026-08-19-q1" data-q="1">
+      <div class="qcard-head">
+        <span class="qnum">1</span>
+        <h2>Uppgift 1<a class="q-title-link" href="exams/2026-08-19.pdf#page=2" target="_blank" rel="noopener noreferrer" title="Öppna uppgift 1 i original-PDF:en (sida 2)" aria-label="Öppna uppgift 1 i original-PDF:en, sida 2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a></h2>
+        <span class="points" data-card-points>0 / 4 p</span>
+      </div>
+<div class="qtags"><span class="tag-group tag-pid"><a class="tag-main" href="lectures/forel.pdf#page=101" target="_blank" rel="noopener noreferrer" title="Föreläsning 12: PID-reglering, s. 101"><span class="tag-label">PID</span><svg class="tag-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a><a class="tag-fs" href="formula-sheets/formsaml_swe_2021-1.pdf#page=18" target="_blank" rel="noopener noreferrer" title="PID-inställning – sida 16 (PDF-sida 18)" aria-label="Formelsamling: PID-inställning, sida 16"><span class="tag-formula" aria-hidden="true">∑</span><span>s. 16</span></a></span><span class="tag-group tag-struct"><a class="tag-main" href="lectures/forel.pdf#page=113" target="_blank" rel="noopener noreferrer" title="Föreläsning 13: Regulatorstrukturer, s. 113"><span class="tag-label">Regulatorstrukturer</span><svg class="tag-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a></span></div>
+      <div class="qbody"><div class="qscroll">
+        
+      <div class="draw-block" data-draw-id="2026-08-19-q1">
+        <div class="draw-wrap">
+          <img loading="lazy" decoding="async" src="assets/2026-08-19/q01.webp?v=3" alt="Uppgift 1" width="1241" height="185">
+          <canvas class="draw-canvas" aria-hidden="true"></canvas>
+        </div>
+        <div class="draw-tools" role="toolbar" aria-label="Rita på bilden">
+          <button type="button" class="draw-btn" data-draw-mode="pen" aria-pressed="false" title="Rita frihand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span>Penna</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="line" aria-pressed="false" title="Dra för att rita en linje. Dra i ändpunkterna för att flytta linjen."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19 19 5"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="5" r="2"/></svg><span>Linje</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="rect" aria-pressed="false" title="Dra för att rita en rektangel. Dra i hörnen för att ändra den."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="1"/></svg><span>Rektangel</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="erase" aria-pressed="false" title="Sudda bort ritade linjer och rektanglar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 21-4-4 10-10 4 4-10 10Z"/><path d="m14 7 3-3 4 4-3 3"/><path d="M7 21h14"/></svg><span>Sudd</span></button>
+          <button type="button" class="draw-clear" title="Rensa alla ritade linjer och rektanglar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg><span>Rensa</span></button>
+          <span class="draw-hint" hidden></span>
+        </div>
+      </div>
+      </div></div>
+      <div class="scoring" data-total="4">
+        <span class="scoring-label">Poäng</span>
+        <div class="point-groups"><div class="point-group"><span class="group-label">4 p</span><div class="pt-boxes"><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="1-0-0" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="1-0-1" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="1-0-2" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="1-0-3" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label></div></div></div>
+      </div>
+      <details class="answer">
+        <summary><span class="chev" aria-hidden="true"></span><span class="label">Visa lösning</span></summary>
+        <div class="answer-body"><div class="answer-inner"><div class="answer-scroll">
+          <img loading="lazy" decoding="async" src="assets/2026-08-19/s01.webp?v=3" alt="Lösning till uppgift 1" width="1241" height="214">
+        </div></div></div>
+      </details>
+    </article>
+
+    <article class="qcard" id="2026-08-19-q2" data-q="2">
+      <div class="qcard-head">
+        <span class="qnum">2</span>
+        <h2>Uppgift 2<a class="q-title-link" href="exams/2026-08-19.pdf#page=2" target="_blank" rel="noopener noreferrer" title="Öppna uppgift 2 i original-PDF:en (sida 2)" aria-label="Öppna uppgift 2 i original-PDF:en, sida 2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a></h2>
+        <span class="points" data-card-points>0 / 6 p</span>
+      </div>
+<div class="qtags"><span class="tag-group tag-stab"><a class="tag-main" href="lectures/forel.pdf#page=40" target="_blank" rel="noopener noreferrer" title="Föreläsning 5: Återkoppling och stabilitet, s. 40"><span class="tag-label">Stabilitet</span><svg class="tag-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a><a class="tag-fs" href="formula-sheets/formsaml_swe_2021-1.pdf#page=14" target="_blank" rel="noopener noreferrer" title="Stabilitet – sida 12 (PDF-sida 14)" aria-label="Formelsamling: Stabilitet, sida 12"><span class="tag-formula" aria-hidden="true">∑</span><span>s. 12</span></a></span></div>
+      <div class="qbody"><div class="qscroll">
+        
+      <div class="draw-block" data-draw-id="2026-08-19-q2">
+        <div class="draw-wrap">
+          <img loading="lazy" decoding="async" src="assets/2026-08-19/q02.webp?v=3" alt="Uppgift 2" width="1241" height="460">
+          <canvas class="draw-canvas" aria-hidden="true"></canvas>
+        </div>
+        <div class="draw-tools" role="toolbar" aria-label="Rita på bilden">
+          <button type="button" class="draw-btn" data-draw-mode="pen" aria-pressed="false" title="Rita frihand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span>Penna</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="line" aria-pressed="false" title="Dra för att rita en linje. Dra i ändpunkterna för att flytta linjen."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19 19 5"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="5" r="2"/></svg><span>Linje</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="rect" aria-pressed="false" title="Dra för att rita en rektangel. Dra i hörnen för att ändra den."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="1"/></svg><span>Rektangel</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="erase" aria-pressed="false" title="Sudda bort ritade linjer och rektanglar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 21-4-4 10-10 4 4-10 10Z"/><path d="m14 7 3-3 4 4-3 3"/><path d="M7 21h14"/></svg><span>Sudd</span></button>
+          <button type="button" class="draw-clear" title="Rensa alla ritade linjer och rektanglar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg><span>Rensa</span></button>
+          <span class="draw-hint" hidden></span>
+        </div>
+      </div>
+      </div></div>
+      <div class="scoring" data-total="6">
+        <span class="scoring-label">Poäng</span>
+        <div class="point-groups"><div class="point-group"><span class="group-label">6 p</span><div class="pt-boxes"><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="2-0-0" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="2-0-1" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="2-0-2" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="2-0-3" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="2-0-4" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="2-0-5" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label></div></div></div>
+      </div>
+      <details class="answer">
+        <summary><span class="chev" aria-hidden="true"></span><span class="label">Visa lösning</span></summary>
+        <div class="answer-body"><div class="answer-inner"><div class="answer-scroll">
+          <img loading="lazy" decoding="async" src="assets/2026-08-19/s02.webp?v=3" alt="Lösning till uppgift 2" width="1241" height="287">
+        </div></div></div>
+      </details>
+    </article>
+
+    <article class="qcard" id="2026-08-19-q3" data-q="3">
+      <div class="qcard-head">
+        <span class="qnum">3</span>
+        <h2>Uppgift 3<a class="q-title-link" href="exams/2026-08-19.pdf#page=2" target="_blank" rel="noopener noreferrer" title="Öppna uppgift 3 i original-PDF:en (sida 2)" aria-label="Öppna uppgift 3 i original-PDF:en, sida 2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a></h2>
+        <span class="points" data-card-points>0 / 4 p</span>
+      </div>
+<div class="qtags"><span class="tag-group tag-freq"><a class="tag-main" href="lectures/forel.pdf#page=27" target="_blank" rel="noopener noreferrer" title="Föreläsning 4: Frekvenssvarsanalys, s. 27"><span class="tag-label">Frekvenssvar</span><svg class="tag-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a><a class="tag-fs" href="formula-sheets/formsaml_swe_2021-1.pdf#page=11" target="_blank" rel="noopener noreferrer" title="Bodediagram – sida 9 (PDF-sida 11)" aria-label="Formelsamling: Bodediagram, sida 9"><span class="tag-formula" aria-hidden="true">∑</span><span>s. 9</span></a></span><span class="tag-group tag-stab"><a class="tag-main" href="lectures/forel.pdf#page=40" target="_blank" rel="noopener noreferrer" title="Föreläsning 5: Återkoppling och stabilitet, s. 40"><span class="tag-label">Stabilitet</span><svg class="tag-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a><a class="tag-fs" href="formula-sheets/formsaml_swe_2021-1.pdf#page=14" target="_blank" rel="noopener noreferrer" title="Stabilitet – sida 12 (PDF-sida 14)" aria-label="Formelsamling: Stabilitet, sida 12"><span class="tag-formula" aria-hidden="true">∑</span><span>s. 12</span></a></span></div>
+      <div class="qbody"><div class="qscroll">
+        
+      <div class="draw-block" data-draw-id="2026-08-19-q3">
+        <div class="draw-wrap">
+          <img loading="lazy" decoding="async" src="assets/2026-08-19/q03.webp?v=3" alt="Uppgift 3" width="1241" height="257">
+          <canvas class="draw-canvas" aria-hidden="true"></canvas>
+        </div>
+        <div class="draw-tools" role="toolbar" aria-label="Rita på bilden">
+          <button type="button" class="draw-btn" data-draw-mode="pen" aria-pressed="false" title="Rita frihand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span>Penna</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="line" aria-pressed="false" title="Dra för att rita en linje. Dra i ändpunkterna för att flytta linjen."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19 19 5"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="5" r="2"/></svg><span>Linje</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="rect" aria-pressed="false" title="Dra för att rita en rektangel. Dra i hörnen för att ändra den."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="1"/></svg><span>Rektangel</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="erase" aria-pressed="false" title="Sudda bort ritade linjer och rektanglar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 21-4-4 10-10 4 4-10 10Z"/><path d="m14 7 3-3 4 4-3 3"/><path d="M7 21h14"/></svg><span>Sudd</span></button>
+          <button type="button" class="draw-clear" title="Rensa alla ritade linjer och rektanglar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg><span>Rensa</span></button>
+          <span class="draw-hint" hidden></span>
+        </div>
+      </div>
+      </div></div>
+      <div class="scoring" data-total="4">
+        <span class="scoring-label">Poäng</span>
+        <div class="point-groups"><div class="point-group"><span class="group-label">4 p</span><div class="pt-boxes"><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="3-0-0" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="3-0-1" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="3-0-2" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="3-0-3" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label></div></div></div>
+      </div>
+      <details class="answer">
+        <summary><span class="chev" aria-hidden="true"></span><span class="label">Visa lösning</span></summary>
+        <div class="answer-body"><div class="answer-inner"><div class="answer-scroll">
+          <img loading="lazy" decoding="async" src="assets/2026-08-19/s03.webp?v=3" alt="Lösning till uppgift 3" width="1241" height="175">
+        </div></div></div>
+      </details>
+    </article>
+
+    <article class="qcard" id="2026-08-19-q4" data-q="4">
+      <div class="qcard-head">
+        <span class="qnum">4</span>
+        <h2>Uppgift 4<a class="q-title-link" href="exams/2026-08-19.pdf#page=3" target="_blank" rel="noopener noreferrer" title="Öppna uppgift 4 i original-PDF:en (sida 3)" aria-label="Öppna uppgift 4 i original-PDF:en, sida 3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a></h2>
+        <span class="points" data-card-points>0 / 6 p</span>
+      </div>
+<div class="qtags"><span class="tag-group tag-kalman"><a class="tag-main" href="lectures/forel.pdf#page=75" target="_blank" rel="noopener noreferrer" title="Föreläsning 9: Kalmanfiltrering, s. 75"><span class="tag-label">Kalmanfilter</span><svg class="tag-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a><a class="tag-fs" href="formula-sheets/formsaml_swe_2021-1.pdf#page=16" target="_blank" rel="noopener noreferrer" title="Kalmanfiltrering – sida 14 (PDF-sida 16)" aria-label="Formelsamling: Kalmanfiltrering, sida 14"><span class="tag-formula" aria-hidden="true">∑</span><span>s. 14</span></a></span></div>
+      <div class="qbody"><div class="qscroll">
+        
+      <div class="draw-block" data-draw-id="2026-08-19-q4">
+        <div class="draw-wrap">
+          <img loading="lazy" decoding="async" src="assets/2026-08-19/q04.webp?v=3" alt="Uppgift 4" width="1241" height="345">
+          <canvas class="draw-canvas" aria-hidden="true"></canvas>
+        </div>
+        <div class="draw-tools" role="toolbar" aria-label="Rita på bilden">
+          <button type="button" class="draw-btn" data-draw-mode="pen" aria-pressed="false" title="Rita frihand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span>Penna</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="line" aria-pressed="false" title="Dra för att rita en linje. Dra i ändpunkterna för att flytta linjen."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19 19 5"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="5" r="2"/></svg><span>Linje</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="rect" aria-pressed="false" title="Dra för att rita en rektangel. Dra i hörnen för att ändra den."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="1"/></svg><span>Rektangel</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="erase" aria-pressed="false" title="Sudda bort ritade linjer och rektanglar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 21-4-4 10-10 4 4-10 10Z"/><path d="m14 7 3-3 4 4-3 3"/><path d="M7 21h14"/></svg><span>Sudd</span></button>
+          <button type="button" class="draw-clear" title="Rensa alla ritade linjer och rektanglar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg><span>Rensa</span></button>
+          <span class="draw-hint" hidden></span>
+        </div>
+      </div>
+      </div></div>
+      <div class="scoring" data-total="6">
+        <span class="scoring-label">Poäng</span>
+        <div class="point-groups"><div class="point-group"><span class="group-label">6 p</span><div class="pt-boxes"><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="4-0-0" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="4-0-1" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="4-0-2" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="4-0-3" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="4-0-4" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="4-0-5" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label></div></div></div>
+      </div>
+      <details class="answer">
+        <summary><span class="chev" aria-hidden="true"></span><span class="label">Visa lösning</span></summary>
+        <div class="answer-body"><div class="answer-inner"><div class="answer-scroll">
+          <img loading="lazy" decoding="async" src="assets/2026-08-19/s04.webp?v=3" alt="Lösning till uppgift 4" width="1241" height="525">
+        </div></div></div>
+      </details>
+    </article>
+
+    <article class="qcard" id="2026-08-19-q5" data-q="5">
+      <div class="qcard-head">
+        <span class="qnum">5</span>
+        <h2>Uppgift 5<a class="q-title-link" href="exams/2026-08-19.pdf#page=3" target="_blank" rel="noopener noreferrer" title="Öppna uppgift 5 i original-PDF:en (sida 3)" aria-label="Öppna uppgift 5 i original-PDF:en, sida 3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a></h2>
+        <span class="points" data-card-points>0 / 8 p</span>
+      </div>
+<div class="qtags"><span class="tag-group tag-pid"><a class="tag-main" href="lectures/forel.pdf#page=101" target="_blank" rel="noopener noreferrer" title="Föreläsning 12: PID-reglering, s. 101"><span class="tag-label">PID</span><svg class="tag-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a><a class="tag-fs" href="formula-sheets/formsaml_swe_2021-1.pdf#page=18" target="_blank" rel="noopener noreferrer" title="PID-inställning – sida 16 (PDF-sida 18)" aria-label="Formelsamling: PID-inställning, sida 16"><span class="tag-formula" aria-hidden="true">∑</span><span>s. 16</span></a></span><span class="tag-group tag-step"><a class="tag-main" href="lectures/forel.pdf#page=20" target="_blank" rel="noopener noreferrer" title="Föreläsning 3: Impuls- och stegsvarsanalys, s. 20"><span class="tag-label">Stegsvar</span><svg class="tag-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a><a class="tag-fs" href="formula-sheets/formsaml_swe_2021-1.pdf#page=7" target="_blank" rel="noopener noreferrer" title="Laplacetransformen – sida 5 (PDF-sida 7)" aria-label="Formelsamling: Laplacetransformen, sida 5"><span class="tag-formula" aria-hidden="true">∑</span><span>s. 5</span></a></span><span class="tag-group tag-nyquist"><a class="tag-main" href="lectures/forel.pdf#page=51" target="_blank" rel="noopener noreferrer" title="Föreläsning 6: Nyquistkriteriet, s. 51"><span class="tag-label">Nyquist</span><svg class="tag-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a><a class="tag-fs" href="formula-sheets/formsaml_swe_2021-1.pdf#page=15" target="_blank" rel="noopener noreferrer" title="Stabilitetsmarginaler – sida 13 (PDF-sida 15)" aria-label="Formelsamling: Stabilitetsmarginaler, sida 13"><span class="tag-formula" aria-hidden="true">∑</span><span>s. 13</span></a></span></div>
+      <div class="qbody"><div class="qscroll">
+        
+      <div class="draw-block" data-draw-id="2026-08-19-q5">
+        <div class="draw-wrap">
+          <img loading="lazy" decoding="async" src="assets/2026-08-19/q05.webp?v=3" alt="Uppgift 5" width="1241" height="1644">
+          <canvas class="draw-canvas" aria-hidden="true"></canvas>
+        </div>
+        <div class="draw-tools" role="toolbar" aria-label="Rita på bilden">
+          <button type="button" class="draw-btn" data-draw-mode="pen" aria-pressed="false" title="Rita frihand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span>Penna</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="line" aria-pressed="false" title="Dra för att rita en linje. Dra i ändpunkterna för att flytta linjen."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19 19 5"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="5" r="2"/></svg><span>Linje</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="rect" aria-pressed="false" title="Dra för att rita en rektangel. Dra i hörnen för att ändra den."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="1"/></svg><span>Rektangel</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="erase" aria-pressed="false" title="Sudda bort ritade linjer och rektanglar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 21-4-4 10-10 4 4-10 10Z"/><path d="m14 7 3-3 4 4-3 3"/><path d="M7 21h14"/></svg><span>Sudd</span></button>
+          <button type="button" class="draw-clear" title="Rensa alla ritade linjer och rektanglar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg><span>Rensa</span></button>
+          <span class="draw-hint" hidden></span>
+        </div>
+      </div>
+      </div></div>
+      <div class="scoring" data-total="8">
+        <span class="scoring-label">Poäng</span>
+        <div class="point-groups"><div class="point-group"><span class="group-label">8 p</span><div class="pt-boxes"><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="5-0-0" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="5-0-1" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="5-0-2" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="5-0-3" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="5-0-4" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="5-0-5" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="5-0-6" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="5-0-7" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label></div></div></div>
+      </div>
+      <details class="answer">
+        <summary><span class="chev" aria-hidden="true"></span><span class="label">Visa lösning</span></summary>
+        <div class="answer-body"><div class="answer-inner"><div class="answer-scroll">
+          <img loading="lazy" decoding="async" src="assets/2026-08-19/s05.webp?v=3" alt="Lösning till uppgift 5" width="1241" height="311">
+        </div></div></div>
+      </details>
+    </article>
+
+    <article class="qcard" id="2026-08-19-q6" data-q="6">
+      <div class="qcard-head">
+        <span class="qnum">6</span>
+        <h2>Uppgift 6<a class="q-title-link" href="exams/2026-08-19.pdf#page=5" target="_blank" rel="noopener noreferrer" title="Öppna uppgift 6 i original-PDF:en (sida 5)" aria-label="Öppna uppgift 6 i original-PDF:en, sida 5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a></h2>
+        <span class="points" data-card-points>0 / 4 p</span>
+      </div>
+<div class="qtags"><span class="tag-group tag-freq"><a class="tag-main" href="lectures/forel.pdf#page=27" target="_blank" rel="noopener noreferrer" title="Föreläsning 4: Frekvenssvarsanalys, s. 27"><span class="tag-label">Frekvenssvar</span><svg class="tag-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a><a class="tag-fs" href="formula-sheets/formsaml_swe_2021-1.pdf#page=11" target="_blank" rel="noopener noreferrer" title="Bodediagram – sida 9 (PDF-sida 11)" aria-label="Formelsamling: Bodediagram, sida 9"><span class="tag-formula" aria-hidden="true">∑</span><span>s. 9</span></a></span></div>
+      <div class="qbody"><div class="qscroll">
+        
+      <div class="draw-block" data-draw-id="2026-08-19-q6">
+        <div class="draw-wrap">
+          <img loading="lazy" decoding="async" src="assets/2026-08-19/q06.webp?v=3" alt="Uppgift 6" width="1241" height="614">
+          <canvas class="draw-canvas" aria-hidden="true"></canvas>
+        </div>
+        <div class="draw-tools" role="toolbar" aria-label="Rita på bilden">
+          <button type="button" class="draw-btn" data-draw-mode="pen" aria-pressed="false" title="Rita frihand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span>Penna</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="line" aria-pressed="false" title="Dra för att rita en linje. Dra i ändpunkterna för att flytta linjen."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19 19 5"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="5" r="2"/></svg><span>Linje</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="rect" aria-pressed="false" title="Dra för att rita en rektangel. Dra i hörnen för att ändra den."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="1"/></svg><span>Rektangel</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="erase" aria-pressed="false" title="Sudda bort ritade linjer och rektanglar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 21-4-4 10-10 4 4-10 10Z"/><path d="m14 7 3-3 4 4-3 3"/><path d="M7 21h14"/></svg><span>Sudd</span></button>
+          <button type="button" class="draw-clear" title="Rensa alla ritade linjer och rektanglar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg><span>Rensa</span></button>
+          <span class="draw-hint" hidden></span>
+        </div>
+      </div>
+      </div></div>
+      <div class="scoring" data-total="4">
+        <span class="scoring-label">Poäng</span>
+        <div class="point-groups"><div class="point-group"><span class="group-label">4 p</span><div class="pt-boxes"><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="6-0-0" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="6-0-1" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="6-0-2" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="6-0-3" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label></div></div></div>
+      </div>
+      <details class="answer">
+        <summary><span class="chev" aria-hidden="true"></span><span class="label">Visa lösning</span></summary>
+        <div class="answer-body"><div class="answer-inner"><div class="answer-scroll">
+          <img loading="lazy" decoding="async" src="assets/2026-08-19/s06.webp?v=3" alt="Lösning till uppgift 6" width="1241" height="281">
+        </div></div></div>
+      </details>
+    </article>
+
+    <article class="qcard" id="2026-08-19-q7" data-q="7">
+      <div class="qcard-head">
+        <span class="qnum">7</span>
+        <h2>Uppgift 7<a class="q-title-link" href="exams/2026-08-19.pdf#page=5" target="_blank" rel="noopener noreferrer" title="Öppna uppgift 7 i original-PDF:en (sida 5)" aria-label="Öppna uppgift 7 i original-PDF:en, sida 5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a></h2>
+        <span class="points" data-card-points>0 / 6 p</span>
+      </div>
+<div class="qtags"><span class="tag-group tag-pid"><a class="tag-main" href="lectures/forel.pdf#page=101" target="_blank" rel="noopener noreferrer" title="Föreläsning 12: PID-reglering, s. 101"><span class="tag-label">PID</span><svg class="tag-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a><a class="tag-fs" href="formula-sheets/formsaml_swe_2021-1.pdf#page=18" target="_blank" rel="noopener noreferrer" title="PID-inställning – sida 16 (PDF-sida 18)" aria-label="Formelsamling: PID-inställning, sida 16"><span class="tag-formula" aria-hidden="true">∑</span><span>s. 16</span></a></span><span class="tag-group tag-freq"><a class="tag-main" href="lectures/forel.pdf#page=27" target="_blank" rel="noopener noreferrer" title="Föreläsning 4: Frekvenssvarsanalys, s. 27"><span class="tag-label">Frekvenssvar</span><svg class="tag-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a><a class="tag-fs" href="formula-sheets/formsaml_swe_2021-1.pdf#page=11" target="_blank" rel="noopener noreferrer" title="Bodediagram – sida 9 (PDF-sida 11)" aria-label="Formelsamling: Bodediagram, sida 9"><span class="tag-formula" aria-hidden="true">∑</span><span>s. 9</span></a></span><span class="tag-group tag-sens"><a class="tag-main" href="lectures/forel.pdf#page=59" target="_blank" rel="noopener noreferrer" title="Föreläsning 7: Känslighet och stationära fel, s. 59"><span class="tag-label">Känslighet &amp; stat. fel</span><svg class="tag-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a></span><span class="tag-group tag-comp"><a class="tag-main" href="lectures/forel.pdf#page=91" target="_blank" rel="noopener noreferrer" title="Föreläsning 11: Kompensering i frekvensplanet, s. 91"><span class="tag-label">Kompensering</span><svg class="tag-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a><a class="tag-fs" href="formula-sheets/formsaml_swe_2021-1.pdf#page=17" target="_blank" rel="noopener noreferrer" title="Kompensering i frekvensplanet – sida 15 (PDF-sida 17)" aria-label="Formelsamling: Kompensering i frekvensplanet, sida 15"><span class="tag-formula" aria-hidden="true">∑</span><span>s. 15</span></a></span></div>
+      <div class="qbody"><div class="qscroll">
+        
+      <div class="draw-block" data-draw-id="2026-08-19-q7">
+        <div class="draw-wrap">
+          <img loading="lazy" decoding="async" src="assets/2026-08-19/q07.webp?v=3" alt="Uppgift 7" width="1241" height="558">
+          <canvas class="draw-canvas" aria-hidden="true"></canvas>
+        </div>
+        <div class="draw-tools" role="toolbar" aria-label="Rita på bilden">
+          <button type="button" class="draw-btn" data-draw-mode="pen" aria-pressed="false" title="Rita frihand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span>Penna</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="line" aria-pressed="false" title="Dra för att rita en linje. Dra i ändpunkterna för att flytta linjen."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19 19 5"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="5" r="2"/></svg><span>Linje</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="rect" aria-pressed="false" title="Dra för att rita en rektangel. Dra i hörnen för att ändra den."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="1"/></svg><span>Rektangel</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="erase" aria-pressed="false" title="Sudda bort ritade linjer och rektanglar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 21-4-4 10-10 4 4-10 10Z"/><path d="m14 7 3-3 4 4-3 3"/><path d="M7 21h14"/></svg><span>Sudd</span></button>
+          <button type="button" class="draw-clear" title="Rensa alla ritade linjer och rektanglar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg><span>Rensa</span></button>
+          <span class="draw-hint" hidden></span>
+        </div>
+      </div>
+      </div></div>
+      <div class="scoring" data-total="6">
+        <span class="scoring-label">Poäng</span>
+        <div class="point-groups"><div class="point-group"><span class="group-label">6 p</span><div class="pt-boxes"><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="7-0-0" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="7-0-1" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="7-0-2" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="7-0-3" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="7-0-4" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="7-0-5" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label></div></div></div>
+      </div>
+      <details class="answer">
+        <summary><span class="chev" aria-hidden="true"></span><span class="label">Visa lösning</span></summary>
+        <div class="answer-body"><div class="answer-inner"><div class="answer-scroll">
+          <img loading="lazy" decoding="async" src="assets/2026-08-19/s07.webp?v=3" alt="Lösning till uppgift 7" width="1241" height="320">
+        </div></div></div>
+      </details>
+    </article>
+
+    <article class="qcard" id="2026-08-19-q8" data-q="8">
+      <div class="qcard-head">
+        <span class="qnum">8</span>
+        <h2>Uppgift 8<a class="q-title-link" href="exams/2026-08-19.pdf#page=7" target="_blank" rel="noopener noreferrer" title="Öppna uppgift 8 i original-PDF:en (sida 7)" aria-label="Öppna uppgift 8 i original-PDF:en, sida 7"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a></h2>
+        <span class="points" data-card-points>0 / 4 p</span>
+      </div>
+<div class="qtags"><span class="tag-group tag-nyquist"><a class="tag-main" href="lectures/forel.pdf#page=51" target="_blank" rel="noopener noreferrer" title="Föreläsning 6: Nyquistkriteriet, s. 51"><span class="tag-label">Nyquist</span><svg class="tag-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a><a class="tag-fs" href="formula-sheets/formsaml_swe_2021-1.pdf#page=15" target="_blank" rel="noopener noreferrer" title="Stabilitetsmarginaler – sida 13 (PDF-sida 15)" aria-label="Formelsamling: Stabilitetsmarginaler, sida 13"><span class="tag-formula" aria-hidden="true">∑</span><span>s. 13</span></a></span></div>
+      <div class="qbody"><div class="qscroll">
+        
+      <div class="draw-block" data-draw-id="2026-08-19-q8">
+        <div class="draw-wrap">
+          <img loading="lazy" decoding="async" src="assets/2026-08-19/q08.webp?v=3" alt="Uppgift 8" width="1241" height="1163">
+          <canvas class="draw-canvas" aria-hidden="true"></canvas>
+        </div>
+        <div class="draw-tools" role="toolbar" aria-label="Rita på bilden">
+          <button type="button" class="draw-btn" data-draw-mode="pen" aria-pressed="false" title="Rita frihand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span>Penna</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="line" aria-pressed="false" title="Dra för att rita en linje. Dra i ändpunkterna för att flytta linjen."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19 19 5"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="5" r="2"/></svg><span>Linje</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="rect" aria-pressed="false" title="Dra för att rita en rektangel. Dra i hörnen för att ändra den."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="1"/></svg><span>Rektangel</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="erase" aria-pressed="false" title="Sudda bort ritade linjer och rektanglar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 21-4-4 10-10 4 4-10 10Z"/><path d="m14 7 3-3 4 4-3 3"/><path d="M7 21h14"/></svg><span>Sudd</span></button>
+          <button type="button" class="draw-clear" title="Rensa alla ritade linjer och rektanglar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg><span>Rensa</span></button>
+          <span class="draw-hint" hidden></span>
+        </div>
+      </div>
+      </div></div>
+      <div class="scoring" data-total="4">
+        <span class="scoring-label">Poäng</span>
+        <div class="point-groups"><div class="point-group"><span class="group-label">4 p</span><div class="pt-boxes"><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="8-0-0" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="8-0-1" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="8-0-2" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="8-0-3" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label></div></div></div>
+      </div>
+      <details class="answer">
+        <summary><span class="chev" aria-hidden="true"></span><span class="label">Visa lösning</span></summary>
+        <div class="answer-body"><div class="answer-inner"><div class="answer-scroll">
+          <img loading="lazy" decoding="async" src="assets/2026-08-19/s08.webp?v=3" alt="Lösning till uppgift 8" width="1241" height="335">
+        </div></div></div>
+      </details>
+    </article>
+
+    <article class="qcard" id="2026-08-19-q9" data-q="9">
+      <div class="qcard-head">
+        <span class="qnum">9</span>
+        <h2>Uppgift 9<a class="q-title-link" href="exams/2026-08-19.pdf#page=9" target="_blank" rel="noopener noreferrer" title="Öppna uppgift 9 i original-PDF:en (sida 9)" aria-label="Öppna uppgift 9 i original-PDF:en, sida 9"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a></h2>
+        <span class="points" data-card-points>0 / 8 p</span>
+      </div>
+<div class="qtags"><span class="tag-group tag-pid"><a class="tag-main" href="lectures/forel.pdf#page=101" target="_blank" rel="noopener noreferrer" title="Föreläsning 12: PID-reglering, s. 101"><span class="tag-label">PID</span><svg class="tag-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a><a class="tag-fs" href="formula-sheets/formsaml_swe_2021-1.pdf#page=18" target="_blank" rel="noopener noreferrer" title="PID-inställning – sida 16 (PDF-sida 18)" aria-label="Formelsamling: PID-inställning, sida 16"><span class="tag-formula" aria-hidden="true">∑</span><span>s. 16</span></a></span><span class="tag-group tag-freq"><a class="tag-main" href="lectures/forel.pdf#page=27" target="_blank" rel="noopener noreferrer" title="Föreläsning 4: Frekvenssvarsanalys, s. 27"><span class="tag-label">Frekvenssvar</span><svg class="tag-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a><a class="tag-fs" href="formula-sheets/formsaml_swe_2021-1.pdf#page=11" target="_blank" rel="noopener noreferrer" title="Bodediagram – sida 9 (PDF-sida 11)" aria-label="Formelsamling: Bodediagram, sida 9"><span class="tag-formula" aria-hidden="true">∑</span><span>s. 9</span></a></span></div>
+      <div class="qbody"><div class="qscroll">
+        
+      <div class="draw-block" data-draw-id="2026-08-19-q9">
+        <div class="draw-wrap">
+          <img loading="lazy" decoding="async" src="assets/2026-08-19/q09.webp?v=3" alt="Uppgift 9" width="1241" height="1320">
+          <canvas class="draw-canvas" aria-hidden="true"></canvas>
+        </div>
+        <div class="draw-tools" role="toolbar" aria-label="Rita på bilden">
+          <button type="button" class="draw-btn" data-draw-mode="pen" aria-pressed="false" title="Rita frihand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span>Penna</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="line" aria-pressed="false" title="Dra för att rita en linje. Dra i ändpunkterna för att flytta linjen."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19 19 5"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="5" r="2"/></svg><span>Linje</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="rect" aria-pressed="false" title="Dra för att rita en rektangel. Dra i hörnen för att ändra den."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="1"/></svg><span>Rektangel</span></button>
+          <button type="button" class="draw-btn" data-draw-mode="erase" aria-pressed="false" title="Sudda bort ritade linjer och rektanglar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 21-4-4 10-10 4 4-10 10Z"/><path d="m14 7 3-3 4 4-3 3"/><path d="M7 21h14"/></svg><span>Sudd</span></button>
+          <button type="button" class="draw-clear" title="Rensa alla ritade linjer och rektanglar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg><span>Rensa</span></button>
+          <span class="draw-hint" hidden></span>
+        </div>
+      </div>
+      </div></div>
+      <div class="scoring" data-total="8">
+        <span class="scoring-label">Poäng</span>
+        <div class="point-groups"><div class="point-group"><span class="group-label">8 p</span><div class="pt-boxes"><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="9-0-0" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="9-0-1" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="9-0-2" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="9-0-3" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="9-0-4" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="9-0-5" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="9-0-6" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label><label class="pt" title="1 p"><input type="checkbox" class="pt-input" data-key="9-0-7" data-value="1" aria-label="1 poäng"><span class="pt-box" aria-hidden="true"></span></label></div></div></div>
+      </div>
+      <details class="answer">
+        <summary><span class="chev" aria-hidden="true"></span><span class="label">Visa lösning</span></summary>
+        <div class="answer-body"><div class="answer-inner"><div class="answer-scroll">
+          <img loading="lazy" decoding="async" src="assets/2026-08-19/s09.webp?v=3" alt="Lösning till uppgift 9" width="1241" height="806">
+        </div></div></div>
+      </details>
+    </article>
+
+  </div>
+</main>
+<footer>Sammanställt från gamla tentamina i Reglerteknik AK. Frågor och lösningar återges som bilder från original-PDF:erna.</footer>
+<script>
+(function () {
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  var panels = Array.prototype.slice.call(document.querySelectorAll('[role="tabpanel"]'));
+  function select(tab) {
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+    });
+    panels.forEach(function (p) {
+      if (p.id === tab.getAttribute('aria-controls')) {
+        p.removeAttribute('hidden');
+        p.querySelectorAll('details.answer img').forEach(function (img) { img.loading = 'eager'; });
+      } else {
+        p.setAttribute('hidden', '');
+      }
+    });
+    tab.scrollIntoView({block: 'nearest', inline: 'nearest'});
+    window.scrollTo({top: 0});
+    scheduleEdgeHints();
+  }
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener('click', function () { select(tab); });
+    tab.addEventListener('keydown', function (e) {
+      var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (!d) return;
+      e.preventDefault();
+      var next = tabs[(i + d + tabs.length) % tabs.length];
+      next.focus(); select(next);
+    });
+  });
+
+
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest ? e.target.closest('[data-open-question]') : null;
+    if (!btn) return;
+    var exam = btn.getAttribute('data-exam');
+    var qn = btn.getAttribute('data-q');
+    var tab = document.querySelector('[role="tab"][aria-controls="exam-' + exam + '"]');
+    if (!tab) return;
+    select(tab);
+    window.requestAnimationFrame(function () {
+      var card = document.getElementById(exam + '-q' + qn);
+      if (card) card.scrollIntoView({behavior: 'smooth', block: 'start'});
+    });
+  });
+
+  var allPanel = document.getElementById('exam-all');
+  if (allPanel) {
+    var filterButtons = Array.prototype.slice.call(allPanel.querySelectorAll('[data-filter-tag]'));
+    var allItems = Array.prototype.slice.call(allPanel.querySelectorAll('.all-item'));
+    var filterCount = allPanel.querySelector('[data-filter-count]');
+    var allEmpty = allPanel.querySelector('.all-empty');
+    var selectedTags = {};
+    function applyTagFilter() {
+      var shown = 0;
+      var keys = Object.keys(selectedTags);
+      allItems.forEach(function (item) {
+        var tags = (item.getAttribute('data-tags') || '').split('|');
+        var show = keys.length === 0 || tags.some(function (t) { return selectedTags[t]; });
+        item.hidden = !show;
+        if (show) shown += 1;
+      });
+      filterButtons.forEach(function (b) {
+        b.setAttribute('aria-pressed', selectedTags[b.getAttribute('data-filter-tag')] ? 'true' : 'false');
+      });
+      if (filterCount) filterCount.textContent = 'Visar ' + shown + ' av ' + allItems.length + ' uppgifter';
+      if (allEmpty) allEmpty.hidden = shown !== 0;
+    }
+    allPanel.addEventListener('click', function (e) {
+      var tagBtn = e.target.closest ? e.target.closest('[data-filter-tag]') : null;
+      if (tagBtn) {
+        var t = tagBtn.getAttribute('data-filter-tag');
+        if (selectedTags[t]) delete selectedTags[t]; else selectedTags[t] = true;
+        applyTagFilter();
+        return;
+      }
+      var clear = e.target.closest ? e.target.closest('[data-filter-clear]') : null;
+      if (clear) {
+        selectedTags = {};
+        applyTagFilter();
+      }
+    });
+    applyTagFilter();
+  }
+
+  function clearAnswerBody(body) {
+    if (!body) return;
+    body.style.maxHeight = '';
+    body.style.overflow = '';
+    body.style.opacity = '';
+    body.style.transform = '';
+    body.style.transition = '';
+  }
+
+  function openAnswerAnimated(d) {
+    if (!d || !d.matches || !d.matches('details.answer') || d.open) return;
+    var body = d.querySelector('.answer-body');
+    if (!body) {
+      d.open = true;
+      return;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      d.open = true;
+      scheduleEdgeHints();
+      return;
+    }
+    var img = d.querySelector('img');
+    if (img) img.loading = 'eager';
+    var token = (d._answerAnim = (d._answerAnim || 0) + 1);
+    body.style.transition = 'none';
+    body.style.overflow = 'hidden';
+    body.style.maxHeight = '0px';
+    body.style.opacity = '0';
+    body.style.transform = 'translateY(-6px)';
+    d.open = true;
+    void body.offsetHeight;
+    var target = body.scrollHeight;
+    body.style.transition = 'max-height .4s cubic-bezier(.2,.8,.25,1), opacity .28s ease, transform .4s cubic-bezier(.2,.8,.25,1)';
+    body.style.maxHeight = target + 'px';
+    body.style.opacity = '1';
+    body.style.transform = 'none';
+    var done = false;
+    var timer = setTimeout(finish, 700);
+    function finish() {
+      if (done || d._answerAnim !== token) return;
+      done = true;
+      clearTimeout(timer);
+      body.removeEventListener('transitionend', onEnd);
+      clearAnswerBody(body);
+      scheduleEdgeHints();
+    }
+    function onEnd(e) {
+      if (e.target === body && e.propertyName === 'max-height') finish();
+    }
+    body.addEventListener('transitionend', onEnd);
+    scheduleEdgeHints();
+  }
+
+  function closeAnswerInstant(d) {
+    if (!d) return;
+    d._answerAnim = (d._answerAnim || 0) + 1;
+    var body = d.querySelector('.answer-body');
+    d.open = false;
+    clearAnswerBody(body);
+  }
+
+  document.addEventListener('click', function (e) {
+    var summary = e.target.closest ? e.target.closest('summary') : null;
+    if (!summary) return;
+    var d = summary.parentElement;
+    if (!d || !d.matches('details.answer')) return;
+    e.preventDefault();
+    if (d.open) closeAnswerInstant(d);
+    else openAnswerAnimated(d);
+  });
+
+  document.addEventListener('toggle', function (e) {
+    var d = e.target;
+    if (!d.matches || !d.matches('details.answer')) return;
+    var label = d.querySelector('summary .label');
+    if (label) label.textContent = d.open ? 'Dölj lösning' : 'Visa lösning';
+    if (d.open) {
+      var img = d.querySelector('img');
+      if (img) img.loading = 'eager';
+      scheduleEdgeHints();
+    }
+  }, true);
+
+  document.addEventListener('click', function (e) {
+    var open = e.target.closest('[data-open-all]');
+    var close = e.target.closest('[data-close-all]');
+    if (!open && !close) return;
+    var panel = e.target.closest('[role="tabpanel"], .standalone');
+    if (!panel) panel = document;
+    if (open) {
+      panel.querySelectorAll('details.answer img').forEach(function (img) { img.loading = 'eager'; });
+      panel.querySelectorAll('details.answer').forEach(function (d) { openAnswerAnimated(d); });
+    } else {
+      panel.querySelectorAll('details.answer').forEach(function (d) { closeAnswerInstant(d); });
+    }
+    scheduleEdgeHints();
+  });
+
+
+  var edgeRaf = 0;
+  function updateEdgeHints() {
+    document.querySelectorAll('.qbody').forEach(function (wrap) {
+      var sc = wrap.querySelector('.qscroll');
+      if (!sc) return;
+      wrap.classList.toggle('can-left', sc.scrollLeft > 2);
+      wrap.classList.toggle('can-right', sc.scrollLeft + sc.clientWidth < sc.scrollWidth - 2);
+    });
+    document.querySelectorAll('.answer-inner').forEach(function (wrap) {
+      var sc = wrap.querySelector('.answer-scroll');
+      if (!sc) return;
+      wrap.classList.toggle('can-left', sc.scrollLeft > 2);
+      wrap.classList.toggle('can-right', sc.scrollLeft + sc.clientWidth < sc.scrollWidth - 2);
+    });
+  }
+  function scheduleEdgeHints() {
+    if (edgeRaf) return;
+    edgeRaf = requestAnimationFrame(function () {
+      edgeRaf = 0;
+      updateEdgeHints();
+    });
+  }
+  document.addEventListener('scroll', function (e) {
+    var t = e.target;
+    if (t && t.matches && (t.matches('.qscroll') || t.matches('.answer-scroll'))) {
+      scheduleEdgeHints();
+    }
+  }, true);
+  window.addEventListener('resize', scheduleEdgeHints);
+  window.addEventListener('load', scheduleEdgeHints);
+  document.querySelectorAll('img').forEach(function (img) {
+    img.addEventListener('load', scheduleEdgeHints);
+  });
+  scheduleEdgeHints();
+
+  function fmtP(n) {
+    var r = Math.round(n * 2) / 2;
+    return String(r).replace('.', ',');
+  }
+  function panelOf(el) {
+    return (el && el.closest && el.closest('[role="tabpanel"], .standalone')) || document;
+  }
+  function updateCard(card) {
+    var sc = card.querySelector('.scoring');
+    if (!sc) return 0;
+    var earned = 0;
+    sc.querySelectorAll('.pt-input:checked').forEach(function (inp) {
+      earned += parseFloat(inp.dataset.value || '0');
+    });
+    var total = parseFloat(sc.dataset.total || '0');
+    var badge = card.querySelector('[data-card-points]');
+    if (badge) badge.textContent = fmtP(earned) + ' / ' + fmtP(total) + ' p';
+    return earned;
+  }
+
+  var confettiCanvas = null, confettiCtx = null, confettiPieces = [], confettiRaf = 0;
+  var confettiColors = ['#d64545', '#e0a03a', '#3f8f5a', '#3c7f9e', '#e8c05a', '#c06c84', '#f5efe3'];
+
+  function resizeConfetti() {
+    if (!confettiCanvas || !confettiCtx) return;
+    var dpr = Math.min(2, window.devicePixelRatio || 1);
+    var w = window.innerWidth, h = window.innerHeight;
+    confettiCanvas.width = Math.floor(w * dpr);
+    confettiCanvas.height = Math.floor(h * dpr);
+    confettiCanvas.style.width = w + 'px';
+    confettiCanvas.style.height = h + 'px';
+    confettiCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function ensureConfetti() {
+    if (confettiCanvas) return;
+    confettiCanvas = document.createElement('canvas');
+    confettiCanvas.className = 'confetti-canvas';
+    confettiCanvas.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(confettiCanvas);
+    confettiCtx = confettiCanvas.getContext('2d');
+    resizeConfetti();
+    window.addEventListener('resize', resizeConfetti);
+  }
+  function spawnConfetti(count, energy) {
+    ensureConfetti();
+    if (!confettiCtx) return;
+    var w = window.innerWidth, h = window.innerHeight;
+    for (var i = 0; i < count; i++) {
+      var mode = Math.random(), x, y, vx, vy;
+      if (mode < 0.38) {
+        x = Math.random() * w;
+        y = -20 - Math.random() * h * 0.25;
+        vx = (Math.random() - 0.5) * 3;
+        vy = 1.5 + Math.random() * 3;
+      } else if (mode < 0.69) {
+        x = -20 - Math.random() * 40;
+        y = h * (0.15 + Math.random() * 0.55);
+        vx = (3 + Math.random() * 6) * energy;
+        vy = -(2 + Math.random() * 5.5);
+      } else {
+        x = w + 20 + Math.random() * 40;
+        y = h * (0.15 + Math.random() * 0.55);
+        vx = -(3 + Math.random() * 6) * energy;
+        vy = -(2 + Math.random() * 5.5);
+      }
+      var shape = Math.random();
+      confettiPieces.push({
+        x: x, y: y, vx: vx, vy: vy,
+        w: shape < 0.38 ? 5 + Math.random() * 5 : (shape < 0.75 ? 8 + Math.random() * 6 : 4),
+        h: shape < 0.38 ? 5 + Math.random() * 5 : (shape < 0.75 ? 4 + Math.random() * 4 : 12 + Math.random() * 8),
+        color: confettiColors[Math.floor(Math.random() * confettiColors.length)],
+        rot: Math.random() * Math.PI * 2,
+        vr: (Math.random() - 0.5) * 0.35,
+        ttl: 130 + Math.random() * 120,
+        circle: shape < 0.38,
+        drag: 0.995,
+        gravity: 0.1 + Math.random() * 0.06
+      });
+    }
+    if (!confettiRaf) confettiRaf = window.requestAnimationFrame(drawConfetti);
+  }
+  function drawConfetti() {
+    if (!confettiCtx) { confettiRaf = 0; return; }
+    var w = window.innerWidth, h = window.innerHeight;
+    confettiCtx.clearRect(0, 0, w, h);
+    var alive = [];
+    for (var i = 0; i < confettiPieces.length; i++) {
+      var p = confettiPieces[i];
+      p.ttl -= 1;
+      p.vy += p.gravity;
+      p.vx *= p.drag;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rot += p.vr;
+      if (p.ttl <= 0 || p.y > h + 100 || p.x < -120 || p.x > w + 120) continue;
+      confettiCtx.save();
+      confettiCtx.translate(p.x, p.y);
+      confettiCtx.rotate(p.rot);
+      confettiCtx.globalAlpha = Math.min(1, p.ttl / 35);
+      confettiCtx.fillStyle = p.color;
+      if (p.circle) {
+        confettiCtx.beginPath();
+        confettiCtx.arc(0, 0, p.w / 2, 0, Math.PI * 2);
+        confettiCtx.fill();
+      } else {
+        confettiCtx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      }
+      confettiCtx.restore();
+      alive.push(p);
+    }
+    confettiPieces = alive;
+    if (alive.length) {
+      confettiRaf = window.requestAnimationFrame(drawConfetti);
+    } else {
+      confettiCtx.clearRect(0, 0, w, h);
+      confettiRaf = 0;
+    }
+  }
+
+  function showGradeBanner(grade, score, total) {
+    var old = document.querySelector('.grade-banner');
+    if (old) old.remove();
+    var el = document.createElement('div');
+    el.className = 'grade-banner grade-banner-' + grade;
+    el.setAttribute('role', 'status');
+    var kicker = grade === 6 ? '★ Alla poäng ★' : grade === 5 ? '★ Maxbetyg ★' : 'Du klarade gränsen';
+    var sub = grade === 6 ? score + ' / ' + total + ' p' : score + ' p';
+    el.innerHTML =
+      '<span class="banner-kicker">' + kicker + '</span>' +
+      '<strong class="banner-title">BETYG ' + grade + '</strong>' +
+      '<span class="banner-sub">' + sub + '</span>';
+    document.body.appendChild(el);
+    window.requestAnimationFrame(function () { el.classList.add('show'); });
+    setTimeout(function () {
+      el.classList.remove('show');
+      setTimeout(function () { el.remove(); }, 500);
+    }, grade === 6 ? 7200 : grade === 5 ? 4300 : 3100);
+  }
+  function showGradeFlash(grade) {
+    document.querySelectorAll('.grade-flash').forEach(function (old) { old.remove(); });
+    var f = document.createElement('div');
+    f.className = 'grade-flash grade-flash-' + grade;
+    document.body.appendChild(f);
+    setTimeout(function () { f.remove(); }, 1100);
+  }
+  function spawnLightsabers(count) {
+    var colors = ['#4cc9f0', '#4ade80', '#f87171', '#c084fc', '#facc15'];
+    for (var i = 0; i < count; i++) {
+      var s = document.createElement('div');
+      var ltr = Math.random() < 0.5;
+      s.className = 'lightsaber ' + (ltr ? 'ltr' : 'rtl');
+      s.style.setProperty('--top', (8 + Math.random() * 80).toFixed(1) + 'vh');
+      s.style.setProperty('--angle', (Math.random() * 36 - 18).toFixed(1) + 'deg');
+      s.style.setProperty('--saber', colors[Math.floor(Math.random() * colors.length)]);
+      s.style.setProperty('--len', (150 + Math.random() * 170).toFixed(0) + 'px');
+      s.style.setProperty('--dur', (0.9 + Math.random() * 0.7).toFixed(2) + 's');
+      s.style.setProperty('--delay', (Math.random() * 0.8).toFixed(2) + 's');
+      s.addEventListener('animationend', function () { this.remove(); });
+      document.body.appendChild(s);
+    }
+  }
+
+  function showPartyMode() {
+    var old = document.querySelector('.party-overlay');
+    if (old) old.remove();
+    var o = document.createElement('div');
+    o.className = 'party-overlay';
+    o.setAttribute('aria-hidden', 'true');
+    o.innerHTML = '<div class="party-floor"></div><div class="disco-ball">🪩</div>';
+    var colors = ['#ff3d81', '#3ddc97', '#3a86ff', '#ffd166', '#c77dff'];
+    var i;
+    for (i = 0; i < 4; i++) {
+      var sp = document.createElement('div');
+      sp.className = 'spotlight';
+      sp.style.left = (-12 + i * 30) + '%';
+      sp.style.setProperty('--spot', colors[i]);
+      sp.style.setProperty('--dur', (3.1 + i * 0.45) + 's');
+      sp.style.setProperty('--delay', (-i * 0.55) + 's');
+      o.appendChild(sp);
+    }
+    for (i = 0; i < 10; i++) {
+      var l = document.createElement('div');
+      l.className = 'laser ' + (i % 2 ? 'rtl' : 'ltr');
+      l.style.top = (10 + Math.random() * 80) + 'vh';
+      l.style.setProperty('--laser', colors[i % colors.length]);
+      l.style.setProperty('--dur', (1.4 + Math.random() * 1.4) + 's');
+      l.style.setProperty('--delay', (-Math.random() * 2) + 's');
+      o.appendChild(l);
+    }
+    var dancers = ['🕺', '💃', '🕺', '💃', '🕺', '💃', '🕺'];
+    for (i = 0; i < dancers.length; i++) {
+      var d = document.createElement('div');
+      d.className = 'dancer';
+      d.textContent = dancers[i];
+      d.style.left = (4 + i * 14) + '%';
+      d.style.fontSize = (40 + (i % 3) * 9) + 'px';
+      d.style.setProperty('--delay', (-i * 0.13) + 's');
+      o.appendChild(d);
+    }
+    for (i = 0; i < 9; i++) {
+      var f = document.createElement('div');
+      f.className = 'fire';
+      f.textContent = '🔥';
+      f.style.left = (3 + i * 11) + '%';
+      f.style.setProperty('--delay', (-Math.random() * 0.6) + 's');
+      o.appendChild(f);
+    }
+    for (i = 0; i < 14; i++) {
+      var dot = document.createElement('div');
+      dot.className = 'disco-dot';
+      dot.style.left = (Math.random() * 100) + '%';
+      dot.style.top = (Math.random() * 90) + '%';
+      dot.style.setProperty('--dot', colors[i % colors.length]);
+      dot.style.setProperty('--dur', (1.5 + Math.random() * 2.2) + 's');
+      dot.style.setProperty('--delay', (-Math.random() * 2) + 's');
+      o.appendChild(dot);
+    }
+    var stars = ['🎉', '✨', '🥳', '🎊', '⭐'];
+    for (i = 0; i < 10; i++) {
+      var st = document.createElement('div');
+      st.className = 'party-star';
+      st.textContent = stars[i % stars.length];
+      st.style.left = (Math.random() * 96) + '%';
+      st.style.top = (10 + Math.random() * 70) + '%';
+      st.style.setProperty('--dur', (2.2 + Math.random() * 2) + 's');
+      st.style.setProperty('--delay', (-Math.random() * 2) + 's');
+      o.appendChild(st);
+    }
+    document.body.appendChild(o);
+    setTimeout(function () { o.classList.add('party-out'); }, 8400);
+    setTimeout(function () { o.remove(); }, 9100);
+  }
+
+  function celebrateGrade(panel, grade) {
+    var gb = panel.querySelector('.gradebar');
+    var badge = gb ? gb.querySelector('[data-grade-badge]') : null;
+    if (gb) {
+      gb.classList.remove('celebrate');
+      void gb.offsetWidth;
+      gb.classList.add('celebrate');
+      setTimeout(function () { gb.classList.remove('celebrate'); }, 1300);
+    }
+    if (badge) {
+      badge.classList.remove('grade-pop');
+      void badge.offsetWidth;
+      badge.classList.add('grade-pop');
+      setTimeout(function () { badge.classList.remove('grade-pop'); }, 750);
+    }
+    var scoreEl = gb ? gb.querySelector('[data-grade-score]') : null;
+    var score = scoreEl ? scoreEl.textContent : '';
+    var total = gb ? gb.dataset.total : '';
+    if (!reduceMotion) showGradeFlash(grade);
+    showGradeBanner(grade, score, total);
+    if (!reduceMotion && grade >= 5) {
+      spawnLightsabers(grade === 6 ? 12 : 7);
+      setTimeout(function () { spawnLightsabers(grade === 6 ? 8 : 5); }, 450);
+      if (grade === 6) setTimeout(function () { spawnLightsabers(8); }, 1100);
+    }
+    if (!reduceMotion && grade === 6) showPartyMode();
+    if (reduceMotion) return;
+    if (grade === 3) {
+      spawnConfetti(110, 1);
+    } else if (grade === 4) {
+      spawnConfetti(160, 1.15);
+      setTimeout(function () { spawnConfetti(80, 1.25); }, 250);
+    } else if (grade === 5) {
+      spawnConfetti(210, 1.35);
+      setTimeout(function () { spawnConfetti(120, 1.5); }, 300);
+      setTimeout(function () { spawnConfetti(90, 1.6); }, 650);
+    } else {
+      spawnConfetti(280, 1.5);
+      [200, 450, 750, 1100, 1500].forEach(function (delay) {
+        setTimeout(function () { spawnConfetti(120, 1.6); }, delay);
+      });
+    }
+  }
+
+  function updateGrade(panel, celebrate) {
+    var gb = panel.querySelector('.gradebar');
+    if (!gb) return;
+    var prevGrade = parseInt(panel.dataset.grade || '0', 10) || 0;
+    var earned = 0;
+    panel.querySelectorAll('.qcard').forEach(function (card) { earned += updateCard(card); });
+    var b = {};
+    try { b = JSON.parse(gb.dataset.boundaries || '{}'); } catch (e) {}
+    var grade = 0;
+    [3, 4, 5].forEach(function (g) {
+      if (b[g] != null && earned >= parseFloat(b[g])) grade = g;
+    });
+    var maxPoints = parseFloat(gb.dataset.total || '0');
+    if (maxPoints > 0 && earned >= maxPoints - 0.001) grade = 6;
+    var score = gb.querySelector('[data-grade-score]');
+    if (score) score.textContent = fmtP(earned);
+    var badge = gb.querySelector('[data-grade-badge]');
+    if (badge) {
+      badge.className = 'grade-badge ' + (grade ? 'grade-' + grade : 'grade-u');
+      var strong = badge.querySelector('strong');
+      if (strong) strong.textContent = grade ? String(grade) : 'U';
+      badge.title = grade ? 'Betyg ' + grade : 'Underkänt';
+      badge.setAttribute('aria-label', grade ? 'Betyg ' + grade : 'Underkänt');
+    }
+    var note = gb.querySelector('[data-grade-note]');
+    if (note) {
+      if (grade >= 6) {
+        note.textContent = 'Alla poäng! Betyg 6';
+      } else if (grade >= 5) {
+        note.textContent = 'Betyg 5 uppnått';
+      } else {
+        var next = grade < 3 ? 3 : grade + 1;
+        var need = parseFloat(b[next] || 0) - earned;
+        note.textContent = fmtP(Math.max(0, need)) + ' p kvar till betyg ' + next;
+      }
+    }
+    panel.dataset.grade = String(grade);
+    if (celebrate && grade > prevGrade && grade >= 3) celebrateGrade(panel, grade);
+  }
+  function savePanel(panel) {
+    var gb = panel.querySelector('.gradebar');
+    if (!gb) return;
+    var data = {};
+    panel.querySelectorAll('.pt-input').forEach(function (inp) {
+      if (inp.checked) data[inp.dataset.key] = 1;
+    });
+    try { localStorage.setItem('regler-grading:' + gb.dataset.exam, JSON.stringify(data)); } catch (e) {}
+  }
+  function loadPanel(panel) {
+    var gb = panel.querySelector('.gradebar');
+    if (!gb) return;
+    var data = {};
+    try { data = JSON.parse(localStorage.getItem('regler-grading:' + gb.dataset.exam) || '{}'); } catch (e) {}
+    panel.querySelectorAll('.pt-input').forEach(function (inp) {
+      inp.checked = !!data[inp.dataset.key];
+    });
+  }
+  function pointImpact(inp) {
+    var box = inp.parentElement ? inp.parentElement.querySelector('.pt-box') : null;
+    if (!box) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    box.classList.remove('pt-hit');
+    void box.offsetWidth;
+    box.classList.add('pt-hit');
+    var hitToken = (box._ptHit = (box._ptHit || 0) + 1);
+    setTimeout(function () {
+      if (box._ptHit === hitToken) box.classList.remove('pt-hit');
+    }, 480);
+    var old = box.querySelector('.pt-sparks');
+    if (old) old.remove();
+    var sparks = document.createElement('span');
+    sparks.className = 'pt-sparks';
+    sparks.setAttribute('aria-hidden', 'true');
+    var colors = ['#d64545', '#e0a03a', '#3f8f5a', '#3c7f9e'];
+    for (var i = 0; i < 9; i++) {
+      var p = document.createElement('i');
+      var angle = (Math.PI * 2 * i / 9) + (Math.random() * 0.5 - 0.25);
+      var dist = 16 + Math.random() * 14;
+      p.style.setProperty('--dx', (Math.cos(angle) * dist).toFixed(1) + 'px');
+      p.style.setProperty('--dy', (Math.sin(angle) * dist - 2).toFixed(1) + 'px');
+      var color = colors[i % colors.length];
+      p.style.background = color;
+      p.style.boxShadow = '0 0 6px ' + color;
+      var sz = 3 + Math.random() * 2.5;
+      p.style.width = sz.toFixed(1) + 'px';
+      p.style.height = sz.toFixed(1) + 'px';
+      p.style.animationDelay = (Math.random() * 0.04).toFixed(2) + 's';
+      sparks.appendChild(p);
+    }
+    box.appendChild(sparks);
+    setTimeout(function () {
+      if (sparks.parentNode) sparks.parentNode.removeChild(sparks);
+    }, 650);
+  }
+  document.addEventListener('change', function (e) {
+    var inp = e.target.closest ? e.target.closest('.pt-input') : null;
+    if (!inp) return;
+    if (inp.checked) pointImpact(inp);
+    var panel = panelOf(inp);
+    updateGrade(panel, true);
+    savePanel(panel);
+  });
+  document.addEventListener('click', function (e) {
+    var reset = e.target.closest ? e.target.closest('[data-reset]') : null;
+    if (!reset) return;
+    var panel = panelOf(reset);
+    panel.querySelectorAll('.pt-input').forEach(function (inp) { inp.checked = false; });
+    var gb = panel.querySelector('.gradebar');
+    if (gb) {
+      try { localStorage.removeItem('regler-grading:' + gb.dataset.exam); } catch (e) {}
+    }
+    updateGrade(panel);
+  });
+  document.querySelectorAll('.gradebar').forEach(function (gb) {
+    var panel = panelOf(gb);
+    loadPanel(panel);
+    updateGrade(panel);
+  });
+
+
+  var mathMarks = Array.prototype.slice.call(document.querySelectorAll('.math-mark'));
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var parallaxQueued = false;
+  function updateParallax() {
+    parallaxQueued = false;
+    if (!mathMarks.length || reduceMotion) return;
+    var vh = window.innerHeight || 800;
+    var scroll = window.scrollY || window.pageYOffset || 0;
+    var range = vh + 160;
+    mathMarks.forEach(function (mark) {
+      var base = (parseFloat(mark.dataset.top) / 100) * vh;
+      var speed = parseFloat(mark.dataset.speed) || 0.12;
+      var op = parseFloat(mark.dataset.op) || 0.1;
+      var y = base - scroll * speed;
+      y = ((y + 80) % range + range) % range - 80;
+      var fade = 1;
+      if (y < 40) fade = Math.max(0, (y + 80) / 120);
+      else if (y > vh - 120) fade = Math.max(0, (vh + 80 - y) / 200);
+      mark.style.top = '0px';
+      mark.style.transform = 'translate3d(0,' + y.toFixed(2) + 'px,0)';
+      mark.style.opacity = (op * fade).toFixed(3);
+    });
+  }
+  function queueParallax() {
+    if (!parallaxQueued) {
+      parallaxQueued = true;
+      window.requestAnimationFrame(updateParallax);
+    }
+  }
+  if (mathMarks.length && !reduceMotion) {
+    window.addEventListener('scroll', queueParallax, {passive: true});
+    window.addEventListener('resize', queueParallax);
+    updateParallax();
+  }
+
+
+  function retryImage(img) {
+    if (img.dataset.retry) return;
+    img.dataset.retry = '1';
+    var src = (img.getAttribute('src') || '').split('?')[0];
+    img.src = src + '?retry=' + Date.now();
+  }
+  document.querySelectorAll('img').forEach(function (img) {
+    img.addEventListener('error', function () { retryImage(img); });
+    if (img.complete && img.naturalWidth === 0) retryImage(img);
+  });
+})();
+
+(function () {
+  var blocks = document.querySelectorAll('.draw-block');
+  if (!blocks.length) return;
+
+  function setup(block) {
+    var img = block.querySelector('img');
+    var canvas = block.querySelector('.draw-canvas');
+    if (!img || !canvas) return;
+    var ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    var mode = null;
+    var strokes = [];
+    var lines = [];
+    var rects = [];
+    var current = null;
+    var drag = null;
+    var ready = false;
+    var color = '#d64545';
+    var lw = 3.5;
+    var handle = 9;
+    var eraseR = 18;
+
+    function d2(a, b) {
+      var dx = a.x - b.x, dy = a.y - b.y;
+      return dx * dx + dy * dy;
+    }
+    function segDist(p, a, b) {
+      var dx = b.x - a.x, dy = b.y - a.y;
+      if (dx === 0 && dy === 0) return Math.sqrt(d2(p, a));
+      var t = ((p.x - a.x) * dx + (p.y - a.y) * dy) / (dx * dx + dy * dy);
+      t = Math.max(0, Math.min(1, t));
+      return Math.sqrt(d2(p, { x: a.x + t * dx, y: a.y + t * dy }));
+    }
+    function pos(e) {
+      var r = canvas.getBoundingClientRect();
+      return {
+        x: (e.clientX - r.left) * canvas.width / r.width,
+        y: (e.clientY - r.top) * canvas.height / r.height
+      };
+    }
+    function drawHandle(x, y) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(x, y, handle, 0, Math.PI * 2);
+      ctx.fillStyle = '#fff';
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = color;
+      ctx.stroke();
+      ctx.restore();
+    }
+    function drawStroke(s) {
+      if (!s.points.length) return;
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = lw;
+      if (s.points.length === 1) {
+        ctx.beginPath();
+        ctx.arc(s.points[0].x, s.points[0].y, lw / 2, 0, Math.PI * 2);
+        ctx.fill();
+        return;
+      }
+      ctx.beginPath();
+      ctx.moveTo(s.points[0].x, s.points[0].y);
+      for (var i = 1; i < s.points.length; i++) {
+        ctx.lineTo(s.points[i].x, s.points[i].y);
+      }
+      ctx.stroke();
+    }
+    function drawLine(l, handles) {
+      ctx.strokeStyle = color;
+      ctx.lineWidth = lw;
+      ctx.beginPath();
+      ctx.moveTo(l.x1, l.y1);
+      ctx.lineTo(l.x2, l.y2);
+      ctx.stroke();
+      if (handles) {
+        drawHandle(l.x1, l.y1);
+        drawHandle(l.x2, l.y2);
+      }
+    }
+    function rectBox(r) {
+      return {
+        x: Math.min(r.x1, r.x2),
+        y: Math.min(r.y1, r.y2),
+        w: Math.abs(r.x2 - r.x1),
+        h: Math.abs(r.y2 - r.y1)
+      };
+    }
+    function drawRect(r, handles) {
+      var b = rectBox(r);
+      ctx.save();
+      ctx.fillStyle = 'rgba(214,69,69,.06)';
+      ctx.fillRect(b.x, b.y, b.w, b.h);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = lw;
+      ctx.strokeRect(b.x, b.y, b.w, b.h);
+      ctx.restore();
+      if (handles) {
+        drawHandle(b.x, b.y);
+        drawHandle(b.x + b.w, b.y);
+        drawHandle(b.x + b.w, b.y + b.h);
+        drawHandle(b.x, b.y + b.h);
+      }
+    }
+    function draw() {
+      if (!ready) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      strokes.forEach(drawStroke);
+      lines.forEach(function (l) { drawLine(l, mode === 'line'); });
+      rects.forEach(function (r) { drawRect(r, mode === 'rect'); });
+      if (current) {
+        if (current.type === 'pen') drawStroke(current);
+        else if (current.type === 'line') drawLine(current.line, true);
+        else if (current.type === 'rect') drawRect(current.rect, true);
+      }
+    }
+    function resize() {
+      if (!img.naturalWidth || !img.naturalHeight) return;
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      ready = true;
+      draw();
+    }
+    if (img.complete && img.naturalWidth) resize();
+    img.addEventListener('load', resize);
+
+    function setMode(m) {
+      mode = (mode === m) ? null : m;
+      Array.prototype.forEach.call(block.querySelectorAll('[data-draw-mode]'), function (b) {
+        b.setAttribute('aria-pressed',
+          b.getAttribute('data-draw-mode') === mode ? 'true' : 'false');
+      });
+      canvas.style.pointerEvents = mode ? 'auto' : 'none';
+      canvas.style.cursor = mode === 'erase' ? 'cell' : 'crosshair';
+      var hint = block.querySelector('.draw-hint');
+      if (hint) {
+        hint.hidden = !(mode === 'line' || mode === 'rect');
+        hint.textContent = mode === 'line'
+          ? 'Dra i linjens ändpunkter för att flytta dem.'
+          : 'Dra i rektangelns hörn för att ändra den.';
+      }
+      current = null;
+      drag = null;
+      draw();
+    }
+    Array.prototype.forEach.call(block.querySelectorAll('[data-draw-mode]'), function (btn) {
+      btn.addEventListener('click', function () {
+        setMode(btn.getAttribute('data-draw-mode'));
+      });
+    });
+    var clearBtn = block.querySelector('.draw-clear');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', function () {
+        strokes = [];
+        lines = [];
+        rects = [];
+        current = null;
+        drag = null;
+        draw();
+      });
+    }
+
+    function eraseAt(p) {
+      lines = lines.filter(function (l) {
+        return segDist(p, { x: l.x1, y: l.y1 }, { x: l.x2, y: l.y2 }) > eraseR;
+      });
+      rects = rects.filter(function (r) {
+        var b = rectBox(r);
+        var x1 = b.x, y1 = b.y, x2 = b.x + b.w, y2 = b.y + b.h;
+        return !(
+          segDist(p, { x: x1, y: y1 }, { x: x2, y: y1 }) <= eraseR ||
+          segDist(p, { x: x2, y: y1 }, { x: x2, y: y2 }) <= eraseR ||
+          segDist(p, { x: x2, y: y2 }, { x: x1, y: y2 }) <= eraseR ||
+          segDist(p, { x: x1, y: y2 }, { x: x1, y: y1 }) <= eraseR
+        );
+      });
+      strokes = strokes.filter(function (s) {
+        if (s.points.length === 1) return Math.sqrt(d2(p, s.points[0])) > eraseR;
+        for (var i = 1; i < s.points.length; i++) {
+          if (segDist(p, s.points[i - 1], s.points[i]) <= eraseR) return false;
+        }
+        return true;
+      });
+      draw();
+    }
+
+    function down(e) {
+      if (!mode || !ready) return;
+      e.preventDefault();
+      var p = pos(e);
+      try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+      if (mode === 'erase') {
+        eraseAt(p);
+        return;
+      }
+      if (mode === 'pen') {
+        current = { type: 'pen', points: [p] };
+        draw();
+        return;
+      }
+      if (mode === 'line') {
+        for (var i = lines.length - 1; i >= 0; i--) {
+          var l = lines[i];
+          if (d2(p, { x: l.x1, y: l.y1 }) < 400) {
+            drag = { kind: 'line', line: l, which: 'p1' };
+            draw();
+            return;
+          }
+          if (d2(p, { x: l.x2, y: l.y2 }) < 400) {
+            drag = { kind: 'line', line: l, which: 'p2' };
+            draw();
+            return;
+          }
+        }
+        for (var j = lines.length - 1; j >= 0; j--) {
+          var l2 = lines[j];
+          if (segDist(p, { x: l2.x1, y: l2.y1 }, { x: l2.x2, y: l2.y2 }) < 10) {
+            drag = { kind: 'line', line: l2, which: 'move', lx: p.x, ly: p.y };
+            draw();
+            return;
+          }
+        }
+        current = { type: 'line', line: { x1: p.x, y1: p.y, x2: p.x, y2: p.y } };
+        draw();
+        return;
+      }
+      if (mode === 'rect') {
+        for (var k = rects.length - 1; k >= 0; k--) {
+          var r = rects[k];
+          var b = rectBox(r);
+          var corners = [
+            { x: b.x, y: b.y, which: 'nw' },
+            { x: b.x + b.w, y: b.y, which: 'ne' },
+            { x: b.x + b.w, y: b.y + b.h, which: 'se' },
+            { x: b.x, y: b.y + b.h, which: 'sw' }
+          ];
+          for (var c = 0; c < corners.length; c++) {
+            if (d2(p, corners[c]) < 400) {
+              drag = { kind: 'rect', rect: r, which: corners[c].which };
+              draw();
+              return;
+            }
+          }
+        }
+        current = { type: 'rect', rect: { x1: p.x, y1: p.y, x2: p.x, y2: p.y } };
+        draw();
+      }
+    }
+
+    function move(e) {
+      if (!mode || !ready) return;
+      var p = pos(e);
+      if (mode === 'erase') {
+        if (e.buttons) eraseAt(p);
+        return;
+      }
+      if (current && current.type === 'pen') {
+        var pts = current.points;
+        if (d2(p, pts[pts.length - 1]) > 4) {
+          pts.push(p);
+          draw();
+        }
+        return;
+      }
+      if (current && current.type === 'line') {
+        current.line.x2 = p.x;
+        current.line.y2 = p.y;
+        draw();
+        return;
+      }
+      if (current && current.type === 'rect') {
+        current.rect.x2 = p.x;
+        current.rect.y2 = p.y;
+        draw();
+        return;
+      }
+      if (!drag) return;
+      if (drag.kind === 'line') {
+        if (drag.which === 'p1') {
+          drag.line.x1 = p.x;
+          drag.line.y1 = p.y;
+        } else if (drag.which === 'p2') {
+          drag.line.x2 = p.x;
+          drag.line.y2 = p.y;
+        } else {
+          var dx = p.x - drag.lx, dy = p.y - drag.ly;
+          drag.line.x1 += dx;
+          drag.line.x2 += dx;
+          drag.line.y1 += dy;
+          drag.line.y2 += dy;
+          drag.lx = p.x;
+          drag.ly = p.y;
+        }
+        draw();
+        return;
+      }
+      if (drag.kind === 'rect') {
+        if (drag.which === 'nw') {
+          drag.rect.x1 = p.x; drag.rect.y1 = p.y;
+        } else if (drag.which === 'ne') {
+          drag.rect.x2 = p.x; drag.rect.y1 = p.y;
+        } else if (drag.which === 'se') {
+          drag.rect.x2 = p.x; drag.rect.y2 = p.y;
+        } else {
+          drag.rect.x1 = p.x; drag.rect.y2 = p.y;
+        }
+        draw();
+      }
+    }
+
+    function up(e) {
+      if (!ready) return;
+      if (current && current.type === 'pen') {
+        if (current.points.length === 1) {
+          current.points.push({ x: current.points[0].x, y: current.points[0].y });
+        }
+        strokes.push(current);
+        current = null;
+        draw();
+      } else if (current && current.type === 'line') {
+        var l = current.line;
+        if (d2({ x: l.x1, y: l.y1 }, { x: l.x2, y: l.y2 }) > 25) lines.push(l);
+        current = null;
+        draw();
+      } else if (current && current.type === 'rect') {
+        var r = current.rect;
+        if (Math.abs(r.x2 - r.x1) > 4 && Math.abs(r.y2 - r.y1) > 4) {
+          if (r.x1 > r.x2) { var t = r.x1; r.x1 = r.x2; r.x2 = t; }
+          if (r.y1 > r.y2) { var u = r.y1; r.y1 = r.y2; r.y2 = u; }
+          rects.push(r);
+        }
+        current = null;
+        draw();
+      }
+      if (drag && drag.kind === 'rect') {
+        var rr = drag.rect;
+        if (Math.abs(rr.x2 - rr.x1) > 4 && Math.abs(rr.y2 - rr.y1) > 4) {
+          if (rr.x1 > rr.x2) { var t2 = rr.x1; rr.x1 = rr.x2; rr.x2 = t2; }
+          if (rr.y1 > rr.y2) { var u2 = rr.y1; rr.y1 = rr.y2; rr.y2 = u2; }
+        }
+      }
+      drag = null;
+      try {
+        if (canvas.hasPointerCapture && canvas.hasPointerCapture(e.pointerId)) {
+          canvas.releasePointerCapture(e.pointerId);
+        }
+      } catch (err) {}
+    }
+
+    canvas.addEventListener('pointerdown', down);
+    canvas.addEventListener('pointermove', move);
+    canvas.addEventListener('pointerup', up);
+    canvas.addEventListener('pointercancel', up);
+  }
+
+  Array.prototype.forEach.call(blocks, setup);
+})();
+
+</script>
+</body>
+</html>

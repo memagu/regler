@@ -1,0 +1,19 @@
+# Local server health check
+html/health
+
+# Generated static-site bundles
+_site/
+site/
+
+# Python caches
+.ruff_cache/
+__pycache__/
+*.py[cod]
+
+# Editor / OS cruft
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
+*.zip
